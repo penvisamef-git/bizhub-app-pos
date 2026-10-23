@@ -1,0 +1,23 @@
+{
+  "en": [
+    {"id": "01-tables", "shot": "restaurant-7-tables-busy", "bg": "sunrise", "h": "Every table at a glance", "s": "Who is sitting, how long, and how much, live."},
+    {"id": "02-order", "shot": "restaurant-5-menu-added", "bg": "cream", "h": "Take orders in seconds", "s": "Sizes, extras and notes go straight to the kitchen."},
+    {"id": "03-bill", "shot": "restaurant-6-bill", "bg": "night", "h": "Send, print, then bill", "s": "Each bill keeps what was sent and what is new."},
+    {"id": "04-pay", "shot": "restaurant-8-pay", "bg": "plum", "h": "Dollars, riel or KHQR", "s": "The change is worked out for you, in both currencies."},
+    {"id": "05-mart", "shot": "mart-2-with-cart", "bg": "amber", "h": "A fast mini mart counter", "s": "Scan a barcode or tap a product. Works offline too."},
+    {"id": "06-receipt", "shot": "mart-5-paid", "bg": "teal", "h": "Receipts in one tap", "s": "Print or share, with the change in riel."},
+    {"id": "07-frontdesk", "shot": "guest_house-2-today", "bg": "sunrise", "h": "A front desk for your guest house", "s": "Rooms, arrivals, departures and money today."},
+    {"id": "08-calendar", "shot": "guest_house-4-calendar", "bg": "night", "h": "Every booking on one calendar", "s": "Tap a free day to book. Tap a stay to open it."}
+  ],
+  "km": [
+    {"id": "01-tables", "shot": "restaurant-7-tables-busy", "bg": "sunrise", "h": "មើលគ្រប់តុ ភ្លាមៗ", "s": "តុណាមានភ្ញៀវ អង្គុយយូរប៉ុណ្ណា និងចំនួនប្រាក់ ផ្ទាល់។"},
+    {"id": "02-order", "shot": "restaurant-5-menu-added", "bg": "cream", "h": "ទទួលការកុម្ម៉ង់ ក្នុងប៉ុន្មានវិនាទី", "s": "ទំហំ គ្រឿងបន្ថែម និងកំណត់សម្គាល់ ទៅដល់ផ្ទះបាយភ្លាម។"},
+    {"id": "03-bill", "shot": "restaurant-6-bill", "bg": "night", "h": "ផ្ញើ បោះពុម្ព រួចគិតលុយ", "s": "វិក្កយបត្រនីមួយៗ ដឹងអ្វីបានផ្ញើ និងអ្វីថ្មី។"},
+    {"id": "04-pay", "shot": "restaurant-8-pay", "bg": "plum", "h": "ដុល្លារ រៀល ឬ KHQR", "s": "គណនាលុយអាប់ឱ្យអ្នក ជាពីររូបិយប័ណ្ណ។"},
+    {"id": "05-mart", "shot": "mart-2-with-cart", "bg": "amber", "h": "បញ្ជរហាងទំនិញ ដែលលឿន", "s": "ស្កេនបាកូដ ឬចុចលើទំនិញ។ ប្រើបានពេលគ្មានអ៊ីនធឺណិត។"},
+    {"id": "06-receipt", "shot": "mart-5-paid", "bg": "teal", "h": "វិក្កយបត្រ ចុចតែម្តង", "s": "បោះពុម្ព ឬចែករំលែក ជាមួយលុយអាប់ជារៀល។"},
+    {"id": "07-frontdesk", "shot": "guest_house-2-today", "bg": "sunrise", "h": "បញ្ជរទទួលភ្ញៀវ សម្រាប់ផ្ទះសំណាក់", "s": "បន្ទប់ ភ្ញៀវមកដល់ ចាកចេញ និងប្រាក់ថ្ងៃនេះ។"},
+    {"id": "08-calendar", "shot": "guest_house-4-calendar", "bg": "night", "h": "ការកក់ទាំងអស់ លើប្រតិទិនតែមួយ", "s": "ចុចថ្ងៃទំនេរ ដើម្បីកក់។ ចុចការស្នាក់នៅ ដើម្បីបើក។"}
+  ],
+  "tablet": ["restaurant-tab-7-tables-busy", "restaurant-tab-6-bill", "restaurant-tab-8-pay", "mart-tab-2-with-cart", "mart-tab-4-paid", "guest_house-tab-2-today", "guest_house-tab-4-calendar", "mart-tab-5-sales"]
+}

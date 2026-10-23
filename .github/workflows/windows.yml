@@ -1,0 +1,60 @@
+# Build BizHub POS for Windows on GitHub's Windows machine (production API) → the installer to download.
+#   Actions → "Build Windows" → Run workflow   (or any push to main that changes the app)
+#   The result: the run's "BizHub-POS-Windows" artifact = BizHub-POS-Setup-<version>.exe + a .zip of the app.
+# Needs the repository secret ENV_PROD_JSON = the whole env.prod.json (Settings → Secrets and variables → Actions).
+name: Build Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "lib/**"
+      - "assets/**"
+      - "windows/**"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - "tool/build_windows.ps1"
+      - ".github/workflows/windows.yml"
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Production settings (from the ENV_PROD_JSON secret)
+        shell: pwsh
+        env:
+          ENV_PROD_JSON: ${{ secrets.ENV_PROD_JSON }}
+        run: |
+          if (-not $env:ENV_PROD_JSON) { throw 'Add the repository secret ENV_PROD_JSON (the contents of env.prod.json).' }
+          Set-Content -Path env.prod.json -Value $env:ENV_PROD_JSON -NoNewline -Encoding utf8
+
+      - name: Inno Setup (makes the installer)
+        run: choco install innosetup -y --no-progress
+
+      - name: Build the app and the installer
+        shell: pwsh
+        run: |
+          flutter --version
+          flutter pub get
+          ./tool/build_windows.ps1
+
+      - name: Remove the production settings file
+        if: always()
+        shell: pwsh
+        run: Remove-Item env.prod.json -ErrorAction SilentlyContinue
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BizHub-POS-Windows
+          path: build/installer/*
+          if-no-files-found: error
+          retention-days: 30
