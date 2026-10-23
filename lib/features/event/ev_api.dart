@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/local_prefs.dart';
 
 import '../../core/api.dart' show ApiError, Json, makeDio, str;
 import '../../core/app_state.dart';
@@ -57,8 +57,8 @@ class EvDoor {
 // what the door phone keeps on itself: the login, the last event list, every ticket code (offline scanning),
 // the scans still to send and this phone's scan history
 class EvStore {
-  static SharedPreferences? _p;
-  static Future<void> init() async => _p ??= await SharedPreferences.getInstance();
+  static LocalPrefs? _p;
+  static Future<void> init() async => _p ??= await LocalPrefs.getInstance();
 
   static Object? get(String k) {
     final raw = _p?.getString('ev.$k');

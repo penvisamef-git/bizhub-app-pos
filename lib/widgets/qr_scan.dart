@@ -3,9 +3,35 @@ import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../core/app_state.dart';
+import '../core/desktop.dart';
 
-// a QR from the camera → its text (null = closed)
-Future<String?> scanQr(BuildContext context, {String? title}) => Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => _ScanPage(title: title)));
+// a QR from the camera → its text (null = closed). Windows (no camera scanner): a box to type the code into,
+// which a USB scanner fills in and presses Enter.
+Future<String?> scanQr(BuildContext context, {String? title}) {
+  if (!hasCameraScanner) return _typeCode(context, title: title);
+  return Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => _ScanPage(title: title)));
+}
+
+Future<String?> _typeCode(BuildContext context, {String? title}) {
+  final t = AppScope.of(context).t;
+  final ctl = TextEditingController();
+  return showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(title ?? t('ks.typeCode')),
+      content: SizedBox(
+        width: 420,
+        child: TextField(
+          controller: ctl,
+          autofocus: true,
+          decoration: InputDecoration(hintText: t('ks.typeCode')),
+          onSubmitted: (v) => Navigator.pop(ctx, v.trim().isEmpty ? null : v.trim()),
+        ),
+      ),
+      actions: [TextButton(onPressed: () => Navigator.pop(ctx, ctl.text.trim().isEmpty ? null : ctl.text.trim()), child: Text(t('ks.ok')))],
+    ),
+  );
+}
 
 class _ScanPage extends StatefulWidget {
   final String? title;

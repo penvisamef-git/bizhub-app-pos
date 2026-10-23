@@ -2,6 +2,13 @@
 #   Actions → "Build Windows" → Run workflow   (or any push to main that changes the app)
 #   The result: the run's "BizHub-POS-Windows" artifact = BizHub-POS-Setup-<version>.exe + a .zip of the app.
 # Needs the repository secret ENV_PROD_JSON = the whole env.prod.json (Settings → Secrets and variables → Actions).
+#
+# Code signing (optional — until these secrets exist the build is simply unsigned, as before):
+#   an SSL.com code-signing certificate with eSigner (cloud signing, no USB token; works from Cambodia)
+#   ES_USERNAME, ES_PASSWORD   the SSL.com account login
+#   ES_CREDENTIAL_ID           eSigner credential id (SSL.com → the certificate → "Signing credentials")
+#   ES_TOTP_SECRET             the eSigner 2-factor secret (shown once when you set up eSigner "automated signing")
+# Both BizHubPOS.exe (before it goes into the installer) and the setup file are signed + timestamped.
 name: Build Windows
 
 on:
@@ -21,6 +28,8 @@ jobs:
   windows:
     runs-on: windows-latest
     timeout-minutes: 45
+    env:
+      SIGNING: ${{ secrets.ES_USERNAME != '' && secrets.ES_CREDENTIAL_ID != '' && 'yes' || '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,12 +49,59 @@ jobs:
       - name: Inno Setup (makes the installer)
         run: choco install innosetup -y --no-progress
 
-      - name: Build the app and the installer
+      - name: Build the app
         shell: pwsh
         run: |
           flutter --version
           flutter pub get
-          ./tool/build_windows.ps1
+          ./tool/build_windows.ps1 -Step app
+
+      - name: Sign BizHubPOS.exe (SSL.com eSigner)
+        if: env.SIGNING == 'yes'
+        uses: sslcom/esigner-codesign@b7f8ff36fc0de8690fbbab8e5b4421d29802f747
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ github.workspace }}/build/windows/x64/runner/Release/BizHubPOS.exe
+          override: true
+          malware_block: false
+          environment_name: PROD
+
+      - name: Make the installer
+        shell: pwsh
+        env:
+          SIGNED_IN_CI: ${{ env.SIGNING }}
+        run: |
+          ./tool/build_windows.ps1 -Step installer
+          $setup = Get-ChildItem build/installer/BizHub-POS-Setup-*.exe | Select-Object -First 1
+          if ($setup) { "SETUP_EXE=$($setup.FullName)" >> $env:GITHUB_ENV }
+
+      - name: Sign the setup file (SSL.com eSigner)
+        if: env.SIGNING == 'yes' && env.SETUP_EXE != ''
+        uses: sslcom/esigner-codesign@b7f8ff36fc0de8690fbbab8e5b4421d29802f747
+        with:
+          command: sign
+          username: ${{ secrets.ES_USERNAME }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
+          totp_secret: ${{ secrets.ES_TOTP_SECRET }}
+          file_path: ${{ env.SETUP_EXE }}
+          override: true
+          malware_block: false
+          environment_name: PROD
+
+      - name: Check the signatures
+        if: env.SIGNING == 'yes'
+        shell: pwsh
+        run: |
+          foreach ($f in @('build/windows/x64/runner/Release/BizHubPOS.exe') + (Get-ChildItem build/installer/*.exe).FullName) {
+            $sig = Get-AuthenticodeSignature $f
+            Write-Host "$f -> $($sig.Status) ($($sig.SignerCertificate.Subject))"
+            if ($sig.Status -ne 'Valid') { throw "$f is not signed" }
+          }
 
       - name: Remove the production settings file
         if: always()

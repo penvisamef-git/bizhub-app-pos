@@ -4,8 +4,8 @@
 
 #include "flutter/generated_plugin_registrant.h"
 
-FlutterWindow::FlutterWindow(const flutter::DartProject& project)
-    : project_(project) {}
+FlutterWindow::FlutterWindow(const flutter::DartProject& project, bool main)
+    : project_(project), main_(main) {}
 
 FlutterWindow::~FlutterWindow() {}
 
@@ -26,9 +26,18 @@ bool FlutterWindow::OnCreate() {
   }
   RegisterPlugins(flutter_controller_->engine());
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
+  if (main_) {
+    display_ = std::make_unique<CustomerDisplay>(
+        flutter_controller_->engine()->messenger());
+  }
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
-    this->Show();
+    if (main_) {
+      this->Show();
+    } else {
+      // the customer screen never takes the keyboard from the counter window
+      ::ShowWindow(GetHandle(), SW_SHOWNOACTIVATE);
+    }
   });
 
   // Flutter can complete the first frame before the "show window" callback is
@@ -40,6 +49,7 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  display_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }

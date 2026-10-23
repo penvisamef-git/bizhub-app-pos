@@ -622,7 +622,7 @@ packages:
     source: hosted
     version: "1.1.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: a7f4874f987173da295a61c181b8ee71dab59b332a486b391babf26a1b884825
@@ -882,6 +882,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  sqlite3:
+    dependency: "direct main"
+    description:
+      name: sqlite3
+      sha256: "3145bd74dcdb4fd6f5c6dda4d4e4490a8087d7f286a14dee5d37087290f0f8a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.4"
   stack_trace:
     dependency: transitive
     description:

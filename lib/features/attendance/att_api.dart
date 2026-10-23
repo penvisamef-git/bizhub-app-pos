@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/local_prefs.dart';
 
 import '../../core/api.dart' show ApiError, Json, makeDio;
 import '../../core/config.dart';
@@ -58,7 +58,7 @@ class AttApi {
 
 // one id per phone, kept forever: the first staff log in locks the account to it (like the web's bizhub_att_device)
 Future<String> attDeviceId() async {
-  final p = await SharedPreferences.getInstance();
+  final p = await LocalPrefs.getInstance();
   var id = p.getString('att.device') ?? '';
   if (id.isEmpty) {
     final r = Random.secure();

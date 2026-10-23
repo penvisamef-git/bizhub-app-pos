@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/app_state.dart';
+import '../../core/desktop.dart';
+import '../../core/printing/printer_settings.dart' show InstalledPrinterList;
 import '../../core/printing/printing.dart';
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
@@ -295,7 +297,7 @@ class _RestPrintersState extends State<RestPrinters> {
             onTap: locked
                 ? null
                 : () {
-                    _set(b.copyWith(kind: k, address: k == PrinterKind.network ? _addr.text.trim() : (k == PrinterKind.bluetooth ? (b.kind == k ? b.address : '') : '')));
+                    _set(b.copyWith(kind: k, address: k == PrinterKind.network ? _addr.text.trim() : ((k == PrinterKind.bluetooth || k == PrinterKind.installed) && b.kind == k ? b.address : '')));
                     if (k == PrinterKind.bluetooth) _loadPaired();
                   },
           ),
@@ -356,6 +358,14 @@ class _RestPrintersState extends State<RestPrinters> {
                 ),
                 const SizedBox(height: 12),
               ],
+              if (isDesktop) kind(PrinterKind.installed, LucideIcons.usb, t('rp.installed'), t('rp.installedSub')),
+              if (isDesktop && b.kind == PrinterKind.installed) ...[
+                InstalledPrinterList(
+                  selected: b.address,
+                  onPick: (url, name) => _set(b.copyWith(address: url, name: name)),
+                ),
+                const SizedBox(height: 8),
+              ],
               kind(PrinterKind.system, LucideIcons.printer, t('rp.system'), t('rp.systemSub'), needAddon: false),
               const SizedBox(height: 8),
               Text(t('rp.paper'), style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -380,7 +390,11 @@ class _RestPrintersState extends State<RestPrinters> {
                         await runPrint(
                           context,
                           () => printWidget(
-                            TestTicket(shop: nameOf(pos.restaurant, app.lang), printer: conf.kind == PrinterKind.bluetooth ? (b.name.isEmpty ? b.address : b.name) : conf.address, t: t),
+                            TestTicket(
+                              shop: nameOf(pos.restaurant, app.lang),
+                              printer: conf.kind == PrinterKind.bluetooth || conf.kind == PrinterKind.installed ? (b.name.isEmpty ? b.address : b.name) : conf.address,
+                              t: t,
+                            ),
                             conf,
                             title: t('rp.testTitle'),
                           ),

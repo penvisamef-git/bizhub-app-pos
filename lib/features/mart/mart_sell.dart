@@ -8,6 +8,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/api.dart' show ApiError;
 import '../../core/app_state.dart';
+import '../../core/desktop.dart';
 import '../../core/format.dart' as f;
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
@@ -111,6 +112,7 @@ class MartSellState extends State<MartSell> {
     }
     HapticFeedback.selectionClick();
     _setCart({...cart, 'lines': lines});
+    if (isDesktop) _focus.requestFocus(); // the USB scanner keeps typing into the scan box
   }
 
   // a scanner types the code and presses Enter; "3*885…" = 3 of them
@@ -162,6 +164,49 @@ class MartSellState extends State<MartSell> {
 
   void reset() => _setCart({'lines': <J>[]});
 
+  // ---------- Mac / Windows keyboard ----------
+  void _find() {
+    _focus.requestFocus();
+    _q.selection = TextSelection(baseOffset: 0, extentOffset: _q.text.length);
+  }
+
+  // F4: the quantity of the item scanned last
+  Future<void> _qtyLast(BuildContext context) async {
+    final lines = jlist(cart['lines']);
+    if (lines.isEmpty) return;
+    final l = lines.first;
+    final t = tr(context);
+    final ctl = TextEditingController(text: qtyOf(l['qty']));
+    ctl.selection = TextSelection(baseOffset: 0, extentOffset: ctl.text.length);
+    final v = await showDialog<double>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(t('ks.qtyFor', {'name': js(l['name'])})),
+        content: TextField(controller: ctl, autofocus: true, keyboardType: const TextInputType.numberWithOptions(decimal: true), onSubmitted: (s) => Navigator.pop(ctx, double.tryParse(s.trim()))),
+        actions: [TextButton(onPressed: () => Navigator.pop(ctx, double.tryParse(ctl.text.trim())), child: Text(t('ks.ok')))],
+      ),
+    );
+    if (v != null && v >= 0) setQty(js(l['key']), v);
+    _focus.requestFocus();
+  }
+
+  Future<void> _payNow(BuildContext context) async {
+    await showMartPay(context, this);
+    if (mounted) _focus.requestFocus();
+  }
+
+  // Esc: clear the scan box first, then (asked) the cart
+  void _escape(BuildContext context, CartSum sum) {
+    if (_q.text.isNotEmpty || _miss.isNotEmpty) {
+      setState(() {
+        _q.clear();
+        _miss = '';
+      });
+      return;
+    }
+    if (jlist(cart['lines']).isNotEmpty) MartCart(sell: this, sum: sum).clear(context);
+  }
+
   Future<void> _camera() async {
     final code = await showModalBottomSheet<String>(context: context, isScrollControlled: true, backgroundColor: Colors.black, builder: (_) => const _Scan());
     if (code != null && code.isNotEmpty) enter(code);
@@ -175,19 +220,33 @@ class MartSellState extends State<MartSell> {
         final big = wide(context);
         final sum = cartSum(cart);
         final left = _left(context);
+        final has = jlist(cart['lines']).isNotEmpty;
+        final cartView = MartCart(sell: this, sum: sum);
+        final keys = <LogicalKeyboardKey, VoidCallback?>{
+          LogicalKeyboardKey.f2: _find,
+          LogicalKeyboardKey.f4: has ? () => _qtyLast(context) : null,
+          LogicalKeyboardKey.f6: has ? () => cartView.discount(context, sum) : null,
+          LogicalKeyboardKey.f9: has ? () => cartView.hold(context) : null,
+          LogicalKeyboardKey.f12: has && !pos.readOnly ? () => _payNow(context) : null,
+          LogicalKeyboardKey.escape: () => _escape(context, sum),
+        };
         if (big) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(child: left),
-              Container(
-                width: 400,
-                margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
-                decoration: BoxDecoration(color: context.c.card, borderRadius: BorderRadius.circular(22), boxShadow: context.c.cardShadow),
-                clipBehavior: Clip.antiAlias,
-                child: MartCart(sell: this, sum: sum),
-              ),
-            ],
+          return DesktopKeys(
+            autofocus: false,
+            keys: keys,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: left),
+                Container(
+                  width: 400,
+                  margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
+                  decoration: BoxDecoration(color: context.c.card, borderRadius: BorderRadius.circular(22), boxShadow: context.c.cardShadow),
+                  clipBehavior: Clip.antiAlias,
+                  child: cartView,
+                ),
+              ],
+            ),
           );
         }
         final lines = jlist(cart['lines']);
@@ -303,7 +362,7 @@ class MartSellState extends State<MartSell> {
                   ),
                 ),
               ),
-              if (!kIsWeb) ...[const SizedBox(width: 8), RoundBtn(LucideIcons.camera, size: 48, tip: t('mpos.scanCamera'), onTap: _camera)],
+              if (!kIsWeb && hasCameraScanner) ...[const SizedBox(width: 8), RoundBtn(LucideIcons.camera, size: 48, tip: t('mpos.scanCamera'), onTap: _camera)],
             ],
           ),
         ),
@@ -348,6 +407,7 @@ class MartSellState extends State<MartSell> {
                   itemBuilder: (context, i) => _Product(shown[i], onTap: () => add(shown[i])),
                 ),
         ),
+        if (isDesktop && wide(context)) KeyHints([('F2', t('ks.find')), ('F4', t('ks.qty')), ('F6', t('ks.discount')), ('F9', t('ks.hold')), ('F12', t('ks.pay')), ('Esc', t('ks.clear'))]),
       ],
     );
   }
@@ -496,10 +556,10 @@ class MartCart extends StatelessWidget {
               const Spacer(),
               if (pos.heldCarts.isNotEmpty)
                 TextButton.icon(onPressed: () => _held(context), icon: const Icon(LucideIcons.circlePause, size: 15), label: Text('${t('mpos.held')} ${pos.heldCarts.length}')),
-              if (lines.isNotEmpty) IconButton(onPressed: () => _hold(context), icon: const Icon(LucideIcons.circlePause, size: 18), tooltip: t('mpos.hold')),
+              if (lines.isNotEmpty) IconButton(onPressed: () => hold(context), icon: const Icon(LucideIcons.circlePause, size: 18), tooltip: t('mpos.hold')),
               if (lines.isNotEmpty)
                 IconButton(
-                  onPressed: () => _clear(context),
+                  onPressed: () => clear(context),
                   icon: Icon(LucideIcons.trash2, size: 18, color: c.danger),
                   tooltip: t('mpos.clear'),
                 ),
@@ -592,7 +652,7 @@ class MartCart extends StatelessWidget {
               pill(
                 LucideIcons.badgePercent,
                 d.isNotEmpty ? '${t('mpos.discount')}: −${f.money(sum.money.discount, cur)}${d['type'] == 'pct' ? ' (${qtyOf(d['value'])}%)' : ''}' : t('mpos.addDiscount'),
-                lines.isEmpty ? null : () => _discount(context, sum),
+                lines.isEmpty ? null : () => discount(context, sum),
                 on: d.isNotEmpty,
               ),
               const SizedBox(height: 4),
@@ -627,7 +687,7 @@ class MartCart extends StatelessWidget {
     );
   }
 
-  void _clear(BuildContext context) {
+  void clear(BuildContext context) {
     final t = tr(context);
     posSheet(
       context,
@@ -656,7 +716,7 @@ class MartCart extends StatelessWidget {
     );
   }
 
-  void _hold(BuildContext context) {
+  void hold(BuildContext context) {
     final t = tr(context);
     final pos = MartPos.i;
     final name = TextEditingController();
@@ -754,7 +814,7 @@ class MartCart extends StatelessWidget {
     );
   }
 
-  void _discount(BuildContext context, CartSum sum) {
+  void discount(BuildContext context, CartSum sum) {
     final t = tr(context);
     final pos = MartPos.i;
     final cur = pos.currency;

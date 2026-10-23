@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/local_prefs.dart';
 
 import '../../../core/app_state.dart';
 import '../../../core/pos_api.dart';
@@ -42,7 +42,7 @@ class RestPos extends ChangeNotifier {
   String error = '';
   ({J shift, ShiftSum sum, bool? synced})? shiftDone; // the shift just closed (synced null = still sending)
 
-  late SharedPreferences _p;
+  late LocalPrefs _p;
   Timer? _loop;
   Timer? _soon;
   int _lastTick = 0;
@@ -149,7 +149,7 @@ class RestPos extends ChangeNotifier {
   Future<void> start(String deviceToken, J dev) async {
     if (_started && token == deviceToken) return;
     _started = true;
-    _p = await SharedPreferences.getInstance();
+    _p = await LocalPrefs.getInstance();
     token = deviceToken;
     // a different device token than what is saved (linked again): start clean
     if (_p.getString('${_k}token') != deviceToken) {

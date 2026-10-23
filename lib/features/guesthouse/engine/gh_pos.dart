@@ -6,7 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/local_prefs.dart';
 
 import '../../../core/api.dart' show ApiError, makeDio;
 import '../../../core/config.dart';
@@ -23,7 +23,7 @@ class GhPos extends ChangeNotifier {
   static const _k = 'gh.'; // keys on this device
   static const live = ['booked', 'in'];
 
-  late SharedPreferences _p;
+  late LocalPrefs _p;
   String device = '';
   String session = '';
   String stage = 'loading'; // loading | pin | boot | nocache | main | unlinked
@@ -82,7 +82,7 @@ class GhPos extends ChangeNotifier {
   Future<void> start(String deviceToken) async {
     if (_started && device == deviceToken) return;
     _started = true;
-    _p = await SharedPreferences.getInstance();
+    _p = await LocalPrefs.getInstance();
     if (_p.getString('${_k}device') != deviceToken) {
       await _clearAll();
       await _p.setString('${_k}device', deviceToken);

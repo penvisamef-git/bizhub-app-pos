@@ -206,7 +206,7 @@ Future<void> openMartPrinters(BuildContext context) async {
             MartPrint.conf = c;
             MartPrint.save();
           },
-          testDoc: (c) => TestTicket(shop: js(MartPos.i.business['name']), printer: c.kind == PrinterKind.bluetooth ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
+          testDoc: (c) => TestTicket(shop: js(MartPos.i.business['name']), printer: c.kind == PrinterKind.bluetooth || c.kind == PrinterKind.installed ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
           extra: [
             SwitchListTile(
               contentPadding: EdgeInsets.zero,

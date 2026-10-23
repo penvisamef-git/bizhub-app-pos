@@ -12,7 +12,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show MethodChannel;
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:printing/printing.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../local_prefs.dart';
 
 import 'net_stub.dart' if (dart.library.io) 'net_io.dart';
 
@@ -22,13 +22,15 @@ import 'net_stub.dart' if (dart.library.io) 'net_io.dart';
 //   network   — Wi-Fi / LAN receipt printer, ESC/POS picture on port 9100 (most kitchen printers)
 //   bluetooth — a Bluetooth receipt printer paired with this phone / tablet (Android, iOS)
 //   system    — the phone's own print window (AirPrint, Android printing, Save as PDF; also on the web)
+//   installed — Mac / Windows only: a printer installed on the computer (a USB receipt printer with its driver),
+//               printed straight away, no print window
 
-enum PrinterKind { none, system, network, bluetooth }
+enum PrinterKind { none, system, network, bluetooth, installed }
 
 class PrinterConf {
   final PrinterKind kind;
-  final String address; // network: "192.168.1.50[:9100]" · bluetooth: MAC address
-  final String name; // bluetooth: the printer's name (shown in settings)
+  final String address; // network: "192.168.1.50[:9100]" · bluetooth: MAC address · installed: the printer's id (url)
+  final String name; // bluetooth / installed: the printer's name (shown in settings)
   final int paper; // 58 | 80 mm
   const PrinterConf({this.kind = PrinterKind.none, this.address = '', this.name = '', this.paper = 80});
 
@@ -53,7 +55,7 @@ class PrinterConf {
 // printer settings of this device (each POS keeps its own under its own key)
 class PrinterStore {
   static Future<Map<String, dynamic>> load(String key) async {
-    final p = await SharedPreferences.getInstance();
+    final p = await LocalPrefs.getInstance();
     try {
       final v = jsonDecode(p.getString(key) ?? '{}');
       return v is Map ? Map<String, dynamic>.from(v) : {};
@@ -62,7 +64,7 @@ class PrinterStore {
     }
   }
 
-  static Future<void> save(String key, Map<String, dynamic> v) async => (await SharedPreferences.getInstance()).setString(key, jsonEncode(v));
+  static Future<void> save(String key, Map<String, dynamic> v) async => (await LocalPrefs.getInstance()).setString(key, jsonEncode(v));
 }
 
 // ---------- drawing a widget off-screen ----------
@@ -197,7 +199,8 @@ Future<void> _bluetooth(String mac, List<int> bytes) async {
   }
 }
 
-Future<void> _system(ui.Image img, String title, int paper) async {
+// the receipt picture as a one-page PDF as wide as the paper roll
+Future<pw.Document> _receiptPdf(ui.Image img, String title, int paper) async {
   final png = (await img.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
   final widthPt = (paper == 58 ? 58 : 80) * PdfPageFormat.mm;
   final heightPt = widthPt * img.height / img.width;
@@ -208,7 +211,37 @@ Future<void> _system(ui.Image img, String title, int paper) async {
       build: (_) => pw.Image(pw.MemoryImage(png), fit: pw.BoxFit.fitWidth),
     ),
   );
+  return doc;
+}
+
+Future<void> _system(ui.Image img, String title, int paper) async {
+  final doc = await _receiptPdf(img, title, paper);
   await Printing.layoutPdf(name: title, onLayout: (_) async => doc.save());
+}
+
+// Mac / Windows: the printers installed on this computer (USB receipt printers with their driver, office printers…)
+Future<List<({String url, String name, bool isDefault})>> installedPrinters() async {
+  try {
+    final list = await Printing.listPrinters();
+    return [for (final p in list.where((p) => p.isAvailable)) (url: p.url, name: p.name, isDefault: p.isDefault)];
+  } catch (_) {
+    throw const PrintError('unsupported');
+  }
+}
+
+// Mac / Windows: print on an installed printer straight away (no print window)
+Future<void> _installed(ui.Image img, String title, int paper, String url, String name) async {
+  final List<Printer> list;
+  try {
+    list = await Printing.listPrinters();
+  } catch (_) {
+    throw const PrintError('unsupported');
+  }
+  final p = list.where((p) => p.url == url).firstOrNull ?? list.where((p) => name.isNotEmpty && p.name == name).firstOrNull;
+  if (p == null || !p.isAvailable) throw const PrintError('not_connected');
+  final doc = await _receiptPdf(img, title, paper);
+  final ok = await Printing.directPrintPdf(printer: p, name: title, onLayout: (_) async => doc.save());
+  if (!ok) throw const PrintError('failed');
 }
 
 // print one receipt-like widget on a printer
@@ -230,6 +263,8 @@ Future<void> printWidget(Widget doc, PrinterConf conf, {String title = 'Receipt'
         }
       case PrinterKind.bluetooth:
         await _bluetooth(conf.address, await escPosImage(img, cut: cut));
+      case PrinterKind.installed:
+        await _installed(img, title, conf.paper, conf.address, conf.name);
       case PrinterKind.none:
         break;
     }

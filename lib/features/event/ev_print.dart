@@ -58,7 +58,7 @@ Future<void> openEvPrinters(BuildContext context) async {
             EvPrint.conf = c;
             EvPrint.save();
           },
-          testDoc: (c) => TestTicket(shop: org, printer: c.kind == PrinterKind.bluetooth ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
+          testDoc: (c) => TestTicket(shop: org, printer: c.kind == PrinterKind.bluetooth || c.kind == PrinterKind.installed ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
           extra: [
             SwitchListTile(
               contentPadding: EdgeInsets.zero,

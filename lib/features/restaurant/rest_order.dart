@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../core/desktop.dart';
 import '../../core/app_state.dart';
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
@@ -29,6 +31,7 @@ class _OrderPageState extends State<OrderPage> {
   String? _id;
   String _cat = '';
   final _q = TextEditingController();
+  final _searchFocus = FocusNode();
   bool _ticketTab = false;
   bool _paying = false;
   bool _closing = false;
@@ -45,6 +48,7 @@ class _OrderPageState extends State<OrderPage> {
   void dispose() {
     pos.removeListener(_watch);
     _q.dispose();
+    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -87,6 +91,46 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
+  // ---------- the bill's buttons (also F8 / F7 / F12 on Mac / Windows); null = the button is off ----------
+  List<J> _lines() => order == null ? <J>[] : jlist(order!['lines']).where((l) => l['void_reason'] != 'removed').toList();
+
+  VoidCallback? _sendAction(BuildContext context) {
+    final o = order;
+    final t = tr(context);
+    if (o == null || !_lines().any((l) => l['status'] == 'new') || pos.blockedReason.isNotEmpty) return null;
+    return () async {
+      final bar = ScaffoldMessenger.of(context);
+      final fresh = jlist(o['lines']).where((l) => l['status'] == 'new').toList();
+      final sent = await pos.sendLines(js(o['_id']));
+      bar.showSnackBar(SnackBar(content: Text(t('rpos.sent'))));
+      if (context.mounted) printKitchenFor(context, sent, fresh);
+      _leave();
+    };
+  }
+
+  VoidCallback? _printAction(BuildContext context) {
+    final o = order;
+    if (o == null || !_lines().any((l) => l['status'] != 'void') || pos.blockedReason.isNotEmpty) return null;
+    return () => previewReceipt(
+      context,
+      o,
+      paid: false,
+      beforePrint: () async {
+        final fresh = jlist(pos.orders[js(o['_id'])]!['lines']).where((l) => l['status'] == 'new').toList();
+        final marked = await pos.markBill(js(o['_id']));
+        if (context.mounted) printKitchenFor(context, marked, fresh);
+        return marked;
+      },
+    );
+  }
+
+  VoidCallback? _payAction(BuildContext context) {
+    final o = order;
+    final tot = o == null ? null : pos.totals(o);
+    if (o == null || tot == null || tot.total <= 0 || pos.blockedReason.isNotEmpty) return null;
+    return () => _pay(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -96,28 +140,43 @@ class _OrderPageState extends State<OrderPage> {
         final big = wide(context);
         final menu = _menu(context);
         final ticket = _ticket(context);
-        return PopScope(
-          canPop: true,
-          child: Scaffold(
-            backgroundColor: c.appBg,
-            body: SafeArea(
-              child: big
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(child: menu),
-                        Container(
-                          width: 400,
-                          margin: const EdgeInsets.fromLTRB(0, 10, 12, 12),
-                          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(24), boxShadow: c.cardShadow),
-                          clipBehavior: Clip.antiAlias,
-                          child: ticket,
-                        ),
-                      ],
-                    )
-                  : (_ticketTab ? ticket : menu),
+        return DesktopKeys(
+          keys: {
+            LogicalKeyboardKey.f2: () => _searchFocus.requestFocus(),
+            LogicalKeyboardKey.f7: pos.payFirst ? null : _printAction(context),
+            LogicalKeyboardKey.f8: pos.payFirst ? null : _sendAction(context),
+            LogicalKeyboardKey.f12: _payAction(context),
+            LogicalKeyboardKey.escape: () {
+              if (_q.text.isNotEmpty) {
+                setState(_q.clear);
+              } else {
+                _leave();
+              }
+            },
+          },
+          child: PopScope(
+            canPop: true,
+            child: Scaffold(
+              backgroundColor: c.appBg,
+              body: SafeArea(
+                child: big
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: menu),
+                          Container(
+                            width: 400,
+                            margin: const EdgeInsets.fromLTRB(0, 10, 12, 12),
+                            decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(24), boxShadow: c.cardShadow),
+                            clipBehavior: Clip.antiAlias,
+                            child: ticket,
+                          ),
+                        ],
+                      )
+                    : (_ticketTab ? ticket : menu),
+              ),
+              bottomNavigationBar: big ? null : _phoneBar(context),
             ),
-            bottomNavigationBar: big ? null : _phoneBar(context),
           ),
         );
       },
@@ -194,6 +253,7 @@ class _OrderPageState extends State<OrderPage> {
               Expanded(
                 child: TextField(
                   controller: _q,
+                  focusNode: _searchFocus,
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: t('rpos.search'),
@@ -229,6 +289,8 @@ class _OrderPageState extends State<OrderPage> {
             itemBuilder: (context, k) => _ItemCard(item: shown[k], disabled: disabled, onTap: () => _tap(shown[k])),
           ),
         ),
+        if (isDesktop && wide(context))
+          KeyHints([('F2', t('ks.find')), if (!pos.payFirst) ('F7', t('ks.print')), if (!pos.payFirst) ('F8', t('ks.send')), ('F12', t('ks.pay')), ('Esc', t('ks.back'))]),
       ],
     );
   }
@@ -242,7 +304,6 @@ class _OrderPageState extends State<OrderPage> {
     final cur = pos.currency;
     final tot = o == null ? null : pos.totals(o);
     final lines = o == null ? <J>[] : jlist(o['lines']).where((l) => l['void_reason'] != 'removed').toList();
-    final hasNew = lines.any((l) => l['status'] == 'new');
     final disabled = pos.blockedReason.isNotEmpty;
     final tableName = js(o?['table_name']).isNotEmpty ? js(o?['table_name']) : js(widget.table?['name']);
     final photo = {for (final i in pos.items) js(i['_id']): js(i['photo'])};
@@ -392,50 +453,15 @@ class _OrderPageState extends State<OrderPage> {
               if (!pos.payFirst) ...[
                 Expanded(
                   flex: 2, // "Pay $17.00" needs the wider part (the bill is narrow on a tablet too)
-                  child: Btn(
-                    t('rpos.send'),
-                    icon: LucideIcons.send,
-                    kind: BtnKind.ghost,
-                    onTap: o == null || !hasNew || disabled
-                        ? null
-                        : () async {
-                            final bar = ScaffoldMessenger.of(context);
-                            final fresh = jlist(o['lines']).where((l) => l['status'] == 'new').toList();
-                            final sent = await pos.sendLines(js(o['_id']));
-                            bar.showSnackBar(SnackBar(content: Text(t('rpos.sent'))));
-                            if (context.mounted) printKitchenFor(context, sent, fresh);
-                            _leave();
-                          },
-                  ),
+                  child: Btn(t('rpos.send'), icon: LucideIcons.send, kind: BtnKind.ghost, onTap: _sendAction(context)),
                 ),
                 const SizedBox(width: 8),
-                RoundBtn(
-                  LucideIcons.printer,
-                  size: 50,
-                  tip: t('rpos.bill'),
-                  onTap: o == null || !lines.any((l) => l['status'] != 'void') || disabled
-                      ? null
-                      : () => previewReceipt(
-                          context,
-                          o,
-                          paid: false,
-                          beforePrint: () async {
-                            final fresh = jlist(pos.orders[js(o['_id'])]!['lines']).where((l) => l['status'] == 'new').toList();
-                            final marked = await pos.markBill(js(o['_id']));
-                            if (context.mounted) printKitchenFor(context, marked, fresh);
-                            return marked;
-                          },
-                        ),
-                ),
+                RoundBtn(LucideIcons.printer, size: 50, tip: t('rpos.bill'), onTap: _printAction(context)),
                 const SizedBox(width: 8),
               ],
               Expanded(
                 flex: 3,
-                child: Btn(
-                  '${t('rpos.pay')} ${tot != null ? m$(tot.total, cur) : ''}',
-                  icon: LucideIcons.wallet,
-                  onTap: o == null || tot == null || tot.total <= 0 || disabled ? null : () => _pay(context),
-                ),
+                child: Btn('${t('rpos.pay')} ${tot != null ? m$(tot.total, cur) : ''}', icon: LucideIcons.wallet, onTap: _payAction(context)),
               ),
             ],
           ),

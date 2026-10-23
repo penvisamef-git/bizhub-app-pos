@@ -231,7 +231,7 @@ Future<void> openGhPrinters(BuildContext context) async {
             GhPrint.conf = c;
             GhPrint.save();
           },
-          testDoc: (c) => TestTicket(shop: js(GhPos.i.business['name']), printer: c.kind == PrinterKind.bluetooth ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
+          testDoc: (c) => TestTicket(shop: js(GhPos.i.business['name']), printer: c.kind == PrinterKind.bluetooth || c.kind == PrinterKind.installed ? (c.name.isEmpty ? c.address : c.name) : c.address, t: t),
           extra: [
             SwitchListTile(
               contentPadding: EdgeInsets.zero,

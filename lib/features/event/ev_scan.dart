@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../core/desktop.dart';
 import '../../core/app_state.dart';
 import '../../core/format.dart';
 import '../../core/theme.dart';
@@ -36,7 +37,8 @@ class _EvScanTabState extends State<EvScanTab> {
   @override
   void initState() {
     super.initState();
-    if (EvScanTab.camera) _cam = MobileScannerController(detectionSpeed: DetectionSpeed.normal, formats: const [BarcodeFormat.qrCode]);
+    // Windows has no camera scanner: the box below takes the code (a USB scanner types it)
+    if (EvScanTab.camera && hasCameraScanner) _cam = MobileScannerController(detectionSpeed: DetectionSpeed.normal, formats: const [BarcodeFormat.qrCode]);
   }
 
   @override

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_state.dart';
+import '../customer_display.dart';
+import '../desktop.dart';
 import '../theme.dart';
 import '../../widgets/ui.dart';
 import 'printing.dart';
@@ -89,7 +91,7 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
             onTap: locked
                 ? null
                 : () {
-                    _set(_c.copyWith(kind: k, address: k == PrinterKind.network ? _addr.text.trim() : (k == PrinterKind.bluetooth && _c.kind == k ? _c.address : '')));
+                    _set(_c.copyWith(kind: k, address: k == PrinterKind.network ? _addr.text.trim() : ((k == PrinterKind.bluetooth || k == PrinterKind.installed) && _c.kind == k ? _c.address : '')));
                     if (k == PrinterKind.bluetooth) _loadPaired();
                   },
           ),
@@ -148,6 +150,14 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
                 ),
                 const SizedBox(height: 12),
               ],
+              if (isDesktop) kind(PrinterKind.installed, LucideIcons.usb, t('rp.installed'), t('rp.installedSub')),
+              if (isDesktop && _c.kind == PrinterKind.installed) ...[
+                InstalledPrinterList(
+                  selected: _c.address,
+                  onPick: (url, name) => _set(_c.copyWith(address: url, name: name)),
+                ),
+                const SizedBox(height: 8),
+              ],
               kind(PrinterKind.system, LucideIcons.printer, t('rp.system'), t('rp.systemSub'), needAddon: false),
               const SizedBox(height: 8),
               Text(t('rp.paper'), style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -185,10 +195,117 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
               ),
               const SizedBox(height: 16),
               ...widget.extra,
+              if (isDesktop) const DesktopCustomerScreenSwitch(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+// Mac / Windows: the printers installed on this computer, to choose the receipt printer (shared by the settings pages)
+class InstalledPrinterList extends StatefulWidget {
+  final String selected; // the chosen printer's id (url)
+  final void Function(String url, String name) onPick;
+  const InstalledPrinterList({super.key, required this.selected, required this.onPick});
+  @override
+  State<InstalledPrinterList> createState() => _InstalledPrinterListState();
+}
+
+class _InstalledPrinterListState extends State<InstalledPrinterList> {
+  List<({String url, String name, bool isDefault})>? _list;
+  String _error = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = '');
+    try {
+      final list = await installedPrinters();
+      if (mounted) setState(() => _list = list);
+    } catch (e) {
+      if (mounted) setState(() => _error = printErrorMessage(e));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppScope.of(context).t;
+    final c = context.c;
+    if (_error.isNotEmpty) {
+      return Alert(
+        _error,
+        tone: Tone.warn,
+        action: TextButton(onPressed: _load, child: Text(t('rpos.retry'))),
+      );
+    }
+    final list = _list;
+    if (list == null) {
+      return const Padding(
+        padding: EdgeInsets.all(12),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (list.isEmpty) {
+      return Alert(
+        t('rp.noInstalled'),
+        tone: Tone.warn,
+        action: TextButton(onPressed: _load, child: Text(t('rpos.retry'))),
+      );
+    }
+    return Column(
+      children: [
+        for (final p in list)
+          ListTile(
+            onTap: () => widget.onPick(p.url, p.name),
+            leading: Icon(widget.selected == p.url ? LucideIcons.circleCheck : LucideIcons.circle, color: widget.selected == p.url ? c.brand : c.muted),
+            title: Text(p.name),
+            subtitle: p.isDefault ? Text(t('rp.defaultPrinter')) : null,
+          ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(onPressed: _load, icon: const Icon(LucideIcons.refreshCw, size: 16), label: Text(t('rpos.retry'))),
+        ),
+      ],
+    );
+  }
+}
+
+// Mac / Windows: use the second monitor as the customer screen (needs the shop's Customer screen add-on)
+class DesktopCustomerScreenSwitch extends StatefulWidget {
+  const DesktopCustomerScreenSwitch({super.key});
+  @override
+  State<DesktopCustomerScreenSwitch> createState() => _DesktopCustomerScreenSwitchState();
+}
+
+class _DesktopCustomerScreenSwitchState extends State<DesktopCustomerScreenSwitch> {
+  bool? _on;
+  @override
+  void initState() {
+    super.initState();
+    CustomerDisplay.desktopOn().then((v) {
+      if (mounted) setState(() => _on = v);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppScope.of(context).t;
+    if (_on == null) return const SizedBox.shrink();
+    return SwitchListTile(
+      contentPadding: EdgeInsets.zero,
+      value: _on!,
+      onChanged: (v) async {
+        setState(() => _on = v);
+        await CustomerDisplay.setDesktopOn(v);
+      },
+      title: Text(t('cd.desktop'), style: const TextStyle(fontWeight: FontWeight.w700)),
+      subtitle: Text(t('cd.desktopSub')),
     );
   }
 }

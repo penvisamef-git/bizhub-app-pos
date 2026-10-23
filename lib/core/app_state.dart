@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'local_prefs.dart';
 
 import 'i18n.dart';
 
@@ -10,11 +10,12 @@ const posKinds = ['restaurant', 'mart', 'guest_house', 'event', 'attendance', 's
 const readyKinds = {'restaurant', 'mart', 'guest_house', 'event', 'attendance', 'stamp_card'};
 
 // What this device is: its language, whether the welcome pages were seen, and the business it is linked to.
-// Everything is kept on the device (SharedPreferences), so the POS opens straight to work, even offline.
+// Everything is kept on the device (LocalPrefs: SharedPreferences on phones, SQLite on Mac / Windows), so the POS
+// opens straight to work, even offline.
 class AppState extends ChangeNotifier {
   AppState._();
   static final AppState i = AppState._();
-  late SharedPreferences _p;
+  late LocalPrefs _p;
 
   String lang = 'km';
   String theme = 'system'; // light | dark | system (same as the phone)
@@ -30,7 +31,7 @@ class AppState extends ChangeNotifier {
 
   static Future<void> init() async {
     final s = i;
-    s._p = await SharedPreferences.getInstance();
+    s._p = await LocalPrefs.getInstance();
     s.lang = s._p.getString('pos.lang') ?? 'km';
     s.onboarded = s._p.getBool('pos.onboarded') ?? false;
     s.theme = s._p.getString('pos.theme') ?? 'system';
