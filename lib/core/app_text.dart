@@ -28,6 +28,8 @@ const appText = <String, Map<String, String>>{
     // choose
     'choose.title': 'What does this device do?',
     'choose.sub': 'Choose the POS for this phone or tablet. You can change it later.',
+    'choose.search': 'Search: restaurant, shop, hotel, Telegram…',
+    'choose.none': 'Nothing for “{q}”. Try another word.',
     'type.restaurant': 'Restaurant',
     'type.restaurant.sub': 'Tables, takeaway, kitchen, bills and payments',
     'type.mart': 'Mini Mart',
@@ -221,6 +223,8 @@ const appText = <String, Map<String, String>>{
     'w4.sub': 'បុគ្គលិកបើក POS ដោយ PIN ផ្ទាល់ខ្លួន។ វេន សាច់ប្រាក់ និងអ្នកណាធ្វើអ្វី ត្រូវបានរក្សាទុកសម្រាប់អ្នក។',
     'choose.title': 'ឧបករណ៍នេះប្រើសម្រាប់អ្វី?',
     'choose.sub': 'ជ្រើសរើស POS សម្រាប់ទូរស័ព្ទ ឬថេប្លេតនេះ។ អ្នកអាចប្តូរពេលក្រោយបាន។',
+    'choose.search': 'ស្វែងរក៖ ភោជនីយដ្ឋាន ហាង ផ្ទះសំណាក់ Telegram…',
+    'choose.none': 'រកមិនឃើញ “{q}”។ សូមសាកពាក្យផ្សេង។',
     'type.restaurant': 'ភោជនីយដ្ឋាន',
     'type.restaurant.sub': 'តុ ខ្ចប់ផ្ទះ ផ្ទះបាយ វិក្កយបត្រ និងការបង់ប្រាក់',
     'type.mart': 'ម៉ាតខ្នាតតូច',

@@ -20,7 +20,11 @@ Widget app(Widget home) => AppScope(
   child: Builder(
     builder: (context) {
       final a = AppScope.of(context);
-      return MaterialApp(debugShowCheckedModeBanner: false, theme: buildTheme(dark: false, khmer: a.lang == 'km'), home: home);
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(dark: false, khmer: a.lang == 'km'),
+        home: home,
+      );
     },
   ),
 );
@@ -64,6 +68,20 @@ void main() {
       await t.ensureVisible(link);
       await settle(t);
       expect(find.textContaining('v$bizhubVersion'), findsOneWidget);
+      // search: one word finds the POS, in either language
+      await t.enterText(find.byKey(const ValueKey('choose-search')), lang == 'km' ? 'telegram' : 'ហាង Telegram');
+      await settle(t);
+      expect(find.text(lang == 'km' ? 'ហាង Telegram' : 'Telegram Store'), findsOneWidget);
+      expect(find.text(lang == 'km' ? 'ភោជនីយដ្ឋាន' : 'Restaurant'), findsNothing);
+      if (lang == 'en') await shot(t, 'up-choose-search');
+      await t.enterText(find.byKey(const ValueKey('choose-search')), 'hotel');
+      await settle(t);
+      expect(find.text(lang == 'km' ? 'ផ្ទះសំណាក់' : 'Guest House'), findsOneWidget);
+      await t.enterText(find.byKey(const ValueKey('choose-search')), 'zzzz');
+      await settle(t);
+      expect(find.textContaining('zzzz'), findsWidgets);
+      await t.enterText(find.byKey(const ValueKey('choose-search')), '');
+      await settle(t);
       if (lang == 'en') await shot(t, 'up-choose');
       await t.tap(link);
       await settle(t);
