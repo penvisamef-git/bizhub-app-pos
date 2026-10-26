@@ -10,6 +10,7 @@ import '../../core/config.dart';
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
 import 'att_api.dart';
+import '../updates/updates_page.dart';
 
 // The door tablet (att_kiosk, like the web's /k/<token>): a QR that changes every 20 s.
 // Staff scan it with their phone → …/a/<code>?k=… → clocked in at this branch, no GPS needed.
@@ -106,6 +107,12 @@ class _AttKioskRootState extends State<AttKioskRoot> {
                 onTap: () {
                   Navigator.pop(sheet);
                   pickTheme(context);
+                },
+              ),
+              UpdatesTile(
+                onTap: () {
+                  Navigator.pop(sheet);
+                  openUpdates(context);
                 },
               ),
               ListTile(

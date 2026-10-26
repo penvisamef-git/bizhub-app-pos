@@ -15,6 +15,8 @@ import 'gh_ops.dart';
 import 'gh_requests.dart';
 import 'gh_print.dart';
 import 'gh_today.dart';
+import '../updates/updates_page.dart';
+import '../updates/changelog.dart' show bizhubVersion;
 
 // The Guest House desk app: link → staff PIN → Today / Calendar / Bookings (+ more with the add-ons)
 class GhRoot extends StatefulWidget {
@@ -486,6 +488,10 @@ class _GhMainState extends State<GhMain> {
             }),
             item(LucideIcons.languages, t('home.lang'), () => app.setLang(app.lang == 'km' ? 'en' : 'km')),
             item(LucideIcons.sunMoon, t('app.theme'), () => pickTheme(context)),
+            item(LucideIcons.history, '${updatesText(app.lang, 'title')} · v$bizhubVersion', () {
+              Navigator.pop(ctx);
+              openUpdates(context);
+            }),
             item(LucideIcons.lock, t('ghp.lock'), () {
               Navigator.pop(ctx);
               pos.lock();

@@ -16,6 +16,7 @@ import '../../widgets/qr_scan.dart';
 import 'att_link.dart';
 import 'att_month.dart';
 import 'att_more.dart';
+import '../updates/updates_page.dart';
 
 // What every staff screen needs: the API with this phone's token, the words, "me", the owner's colour.
 class AttCtx {
@@ -218,6 +219,7 @@ class _AttStaffRootState extends State<AttStaffRoot> with WidgetsBindingObserver
             child: Text(app.lang == 'km' ? 'EN' : 'ខ្មែរ', style: const TextStyle(fontWeight: FontWeight.w700)),
           ),
           const ThemeBtn(),
+          IconButton(onPressed: () => openUpdates(context), icon: const Icon(LucideIcons.history), tooltip: updatesText(app.lang, 'title')),
           IconButton(onPressed: _logout, icon: const Icon(LucideIcons.power), tooltip: t('att.logout')),
           const SizedBox(width: 4),
         ],

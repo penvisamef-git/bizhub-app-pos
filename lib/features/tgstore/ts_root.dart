@@ -13,6 +13,7 @@ import '../../widgets/ui.dart';
 import 'ts_api.dart';
 import 'ts_card.dart';
 import 'ts_print.dart';
+import '../updates/updates_page.dart';
 
 // Telegram Store staff screen (web: /pos/tg-store): paired with the owner's 6-digit code (link page) → each staff
 // member's PIN → orders come in with a sound: New · Making · Ready, accept / reject / ready / done / paid, print a ticket;
@@ -81,6 +82,7 @@ class _TsStaffRootState extends State<TsStaffRoot> {
             ListTile(leading: const Icon(LucideIcons.printer), title: Text(tsa('printers')), onTap: () => Navigator.pop(s, 'print')),
             ListTile(leading: const Icon(LucideIcons.sunMoon), title: Text(t('app.theme')), onTap: () => Navigator.pop(s, 'theme')),
             ListTile(leading: const Icon(LucideIcons.languages), title: Text(app.lang == 'km' ? 'English' : 'ភាសាខ្មែរ'), onTap: () => Navigator.pop(s, 'lang')),
+            UpdatesTile(onTap: () => Navigator.pop(s, 'updates')),
             if (!_pin) ListTile(leading: const Icon(LucideIcons.lock), title: Text(tsx('logout')), onTap: () => Navigator.pop(s, 'lock')),
             ListTile(
               leading: Icon(LucideIcons.unlink, color: s.c.danger),
@@ -100,6 +102,8 @@ class _TsStaffRootState extends State<TsStaffRoot> {
         openTsPrinters(context);
       case 'theme':
         pickTheme(context);
+      case 'updates':
+        openUpdates(context);
       case 'lang':
         app.setLang(app.lang == 'km' ? 'en' : 'km');
       case 'lock':

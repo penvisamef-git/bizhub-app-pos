@@ -18,6 +18,8 @@ import 'mart_sales.dart';
 import 'mart_sell.dart';
 import 'mart_shift.dart';
 import 'mart_stock.dart';
+import '../updates/updates_page.dart';
+import '../updates/changelog.dart' show bizhubVersion;
 
 // The Mini Mart POS in the app: PIN → (count the drawer) → sell. Works offline like the web's /pos/mini-mart.
 class MartRoot extends StatefulWidget {
@@ -490,6 +492,10 @@ class _MartMainState extends State<MartMain> {
             }),
             item(LucideIcons.languages, t('home.lang'), () => app.setLang(app.lang == 'km' ? 'en' : 'km')),
             item(LucideIcons.sunMoon, t('app.theme'), () => pickTheme(context)),
+            item(LucideIcons.history, '${updatesText(app.lang, 'title')} · v$bizhubVersion', () {
+              Navigator.pop(ctx);
+              openUpdates(context);
+            }),
             item(LucideIcons.lock, t('mpos.lock'), () {
               Navigator.pop(ctx);
               widget.onLock();

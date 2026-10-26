@@ -16,6 +16,8 @@ import 'rest_print.dart';
 import 'rest_report.dart';
 import 'rest_shift.dart';
 import 'rest_start.dart';
+import '../updates/updates_page.dart';
+import '../updates/changelog.dart' show bizhubVersion;
 
 // time at the table: 05:12 → 1:05:12
 String elapsed(Object? at, DateTime now) {
@@ -287,6 +289,10 @@ class _TopBar extends StatelessWidget {
               }),
               item(LucideIcons.languages, t('home.lang'), () => app.setLang(app.lang == 'km' ? 'en' : 'km')),
               item(LucideIcons.sunMoon, t('app.theme'), () => pickTheme(context)),
+              item(LucideIcons.history, '${updatesText(app.lang, 'title')} · v$bizhubVersion', () {
+                Navigator.pop(ctx);
+                openUpdates(context);
+              }),
               const Divider(height: 18),
               item(LucideIcons.unplug, t('rpos.unlink'), () {
                 Navigator.pop(ctx);

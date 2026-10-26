@@ -12,6 +12,7 @@ import 'ev_live.dart';
 import 'ev_print.dart';
 import 'ev_scan.dart';
 import 'ev_tabs.dart';
+import '../updates/updates_page.dart';
 
 // Event Tickets door phone (web: /pos/event): paired with the organiser's 6-digit code (link page) →
 // each team member's PIN → choose the event → Scan (works offline) · Live · Guests · Sell at the gate · Orders
@@ -114,6 +115,7 @@ class _EvDoorRootState extends State<EvDoorRoot> {
             ListTile(leading: const Icon(LucideIcons.printer), title: Text(t('evx.printers')), onTap: () => Navigator.pop(s, 'print')),
             ListTile(leading: const Icon(LucideIcons.sunMoon), title: Text(t('app.theme')), onTap: () => Navigator.pop(s, 'theme')),
             ListTile(leading: const Icon(LucideIcons.languages), title: Text(app.lang == 'km' ? 'English' : 'ភាសាខ្មែរ'), onTap: () => Navigator.pop(s, 'lang')),
+            UpdatesTile(onTap: () => Navigator.pop(s, 'updates')),
             if (_stage == 'main') ListTile(leading: const Icon(LucideIcons.logOut), title: Text(ev('logout')), onTap: () => Navigator.pop(s, 'logout')),
             ListTile(
               leading: Icon(LucideIcons.unlink, color: s.c.danger),
@@ -133,6 +135,8 @@ class _EvDoorRootState extends State<EvDoorRoot> {
         openEvPrinters(context);
       case 'theme':
         pickTheme(context);
+      case 'updates':
+        openUpdates(context);
       case 'lang':
         app.setLang(app.lang == 'km' ? 'en' : 'km');
       case 'logout':

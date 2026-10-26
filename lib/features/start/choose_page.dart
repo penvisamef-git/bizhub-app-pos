@@ -7,6 +7,8 @@ import '../../widgets/ui.dart';
 import '../attendance/att_link.dart';
 import '../stamp/sc_root.dart';
 import 'link_page.dart';
+import '../updates/updates_page.dart';
+import '../updates/changelog.dart' show bizhubVersion;
 
 // Choose what this device is: one of the 5 POS kinds. The ready ones go on to the link code.
 class ChoosePage extends StatelessWidget {
@@ -71,6 +73,15 @@ class ChoosePage extends StatelessWidget {
                       ],
                     );
                   },
+                ),
+                const SizedBox(height: 18),
+                Center(
+                  child: TextButton.icon(
+                    key: const ValueKey('choose-updates'),
+                    onPressed: () => openUpdates(context),
+                    icon: Icon(LucideIcons.history, size: 16, color: c.muted),
+                    label: Text('${updatesText(app.lang, 'title')} · v$bizhubVersion', style: TextStyle(color: c.muted, fontWeight: FontWeight.w600)),
+                  ),
                 ),
               ],
             ),

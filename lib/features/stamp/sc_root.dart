@@ -11,6 +11,8 @@ import '../../widgets/ui.dart';
 import '../start/demo_link.dart';
 import 'sc_common.dart';
 import 'sc_desk.dart';
+import '../updates/updates_page.dart';
+import '../updates/changelog.dart' show bizhubVersion;
 
 // …/stamp/desk/<slug> or the bare slug
 String? parseDeskLink(String v) {
@@ -327,8 +329,12 @@ class _StampDeskRootState extends State<StampDeskRoot> {
           PopupMenuButton<String>(
             icon: const Icon(LucideIcons.ellipsisVertical),
             tooltip: t('st.more'),
-            onSelected: (v) => v == 'unlink' ? _unlink() : (v == 'theme' ? pickTheme(context) : null),
-            itemBuilder: (_) => [PopupMenuItem(value: 'theme', child: Text(t('app.theme'))), PopupMenuItem(value: 'unlink', child: Text(t('st.unlink')))],
+            onSelected: (v) => v == 'unlink' ? _unlink() : (v == 'theme' ? pickTheme(context) : (v == 'updates' ? openUpdates(context) : null)),
+            itemBuilder: (_) => [
+              PopupMenuItem(value: 'theme', child: Text(t('app.theme'))),
+              PopupMenuItem(value: 'updates', child: Text('${updatesText(app.lang, 'title')} · v$bizhubVersion')),
+              PopupMenuItem(value: 'unlink', child: Text(t('st.unlink'))),
+            ],
           ),
         ],
       ),
