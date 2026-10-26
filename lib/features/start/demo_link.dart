@@ -7,6 +7,7 @@ import '../../core/theme.dart';
 import '../../widgets/ui.dart';
 import '../attendance/att_api.dart' show attDeviceId;
 import '../event/ev_api.dart' show EvStore;
+import '../tgstore/ts_api.dart' show TsStore;
 
 // "Try demo": link this device to a sample business of the BizHub demo account, without a code or QR from an owner
 // (POST /api/public/pos-demo). Everybody shares the sample businesses; the staff PIN comes with the answer and is shown
@@ -40,6 +41,11 @@ Future<void> linkDemo(String kind, {String mode = ''}) async {
       await EvStore.init();
       EvStore.clear();
       AppState.i.linked({'kind': kind, 'token': str(d['token']), 'device': {'name': 'Demo'}, 'shop': str(org['name']), 'logo': str(org['logo']), ...demo});
+    case 'tg_store':
+      final shop = obj(d['shop']);
+      await TsStore.init();
+      TsStore.clear();
+      AppState.i.linked({'kind': kind, 'token': str(d['token']), 'device': {'name': 'Demo'}, 'shop': str(shop['name']), 'logo': str(shop['logo']), ...demo});
     case 'stamp_card':
       final shop = obj(d['shop']);
       AppState.i.linked({'kind': kind, 'slug': str(d['slug']), 'token': '', 'name': '', 'shop': str(shop['name']), 'logo': str(shop['logo']), ...demo});

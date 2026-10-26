@@ -54,3 +54,6 @@ env.prod.json
 # store screenshots (made by tool/store_shots.sh + store/android/compose/build.py)
 /test/store/out/
 /store/android/compose/.tmp/
+
+# Telegram Store screen pictures (flutter test test/ts_shots_test.dart --update-goldens)
+/test/shots/

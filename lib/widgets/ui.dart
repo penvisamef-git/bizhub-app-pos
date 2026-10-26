@@ -84,6 +84,7 @@ const typeIcons = <String, IconData>{
   'guest_house': LucideIcons.bedDouble,
   'mart': LucideIcons.shoppingBasket,
   'event': LucideIcons.ticket,
+  'tg_store': LucideIcons.send,
 };
 // the small icons in "My businesses" rows (DashboardPage.jsx BizRow)
 const rowIcons = <String, IconData>{

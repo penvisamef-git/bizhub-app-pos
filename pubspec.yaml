@@ -57,6 +57,7 @@ dependencies:
   wakelock_plus: ^1.7.0
   sqlite3: ^2.9.0 # Mac / Windows: the local data in SQLite (lib/core/local_prefs_io.dart); unused on phones
   path_provider: ^2.1.6
+  audioplayers: ^6.7.1 # the Telegram Store order sound (assets/sounds/ts_chime.wav)
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,7 @@ flutter:
   assets:
     - assets/i18n/
     - assets/brand/
+    - assets/sounds/
   fonts:
     - family: PlusJakartaSans
       fonts:

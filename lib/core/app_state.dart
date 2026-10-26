@@ -6,8 +6,8 @@ import 'local_prefs.dart';
 import 'i18n.dart';
 
 // The POS kinds this app can be (Biz Hub business types). Only "ready" ones can be linked in the app today.
-const posKinds = ['restaurant', 'mart', 'guest_house', 'event', 'attendance', 'stamp_card'];
-const readyKinds = {'restaurant', 'mart', 'guest_house', 'event', 'attendance', 'stamp_card'};
+const posKinds = ['restaurant', 'mart', 'guest_house', 'tg_store', 'event', 'attendance', 'stamp_card'];
+const readyKinds = {'restaurant', 'mart', 'guest_house', 'tg_store', 'event', 'attendance', 'stamp_card'};
 
 // What this device is: its language, whether the welcome pages were seen, and the business it is linked to.
 // Everything is kept on the device (LocalPrefs: SharedPreferences on phones, SQLite on Mac / Windows), so the POS

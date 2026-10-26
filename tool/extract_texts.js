@@ -64,6 +64,8 @@ const out = {
   sc: pick("dashboard/client/stamp/text.js", "const TEXT ="), // stamp card: the counter, customers, history, stats
   scp: pick("stamp/text.js", "const TEXT ="), // stamp card: the desk page
   evd: pick("pos/event/doorText.js", "const TEXT ="), // event tickets: the door phone
+  tsx: pick("pos/tgstore/tsPosText.js", "const TEXT ="), // telegram store: the staff screen
+  ts: pick("dashboard/client/tgstore/text.js", "const TEXT ="), // telegram store: the order card words (the owner's dashboard)
 };
 // one flat map per language: section.key → text (nested objects keep their path)
 const langs = {};

@@ -1,0 +1,664 @@
+{
+ "GET /api/tspos/shop": {
+  "success": true,
+  "data": {
+   "shop": {
+    "name": "Mekong Coffee Shop",
+    "logo": "",
+    "color": "",
+    "theme": "grid-cream",
+    "currency": "USD",
+    "slug": "mekong-coffee-shop",
+    "riders": false
+   },
+   "device": {
+    "name": "Demo"
+   }
+  }
+ },
+ "POST /api/tspos/login": {
+  "success": true,
+  "data": {
+   "session": "test-session",
+   "staff": {
+    "_id": "6adf190f36bbcc7a96fba576",
+    "name": "Demo Manager",
+    "role": "manager",
+    "active": true,
+    "created_date": "2026-10-26T09:10:39.848Z"
+   }
+  }
+ },
+ "GET /api/tspos/boot": {
+  "success": true,
+  "data": {
+   "shop": {
+    "name": "Mekong Coffee Shop",
+    "logo": "",
+    "color": "",
+    "theme": "grid-cream",
+    "currency": "USD",
+    "slug": "mekong-coffee-shop",
+    "riders": false
+   },
+   "staff": {
+    "_id": "6adf190f36bbcc7a96fba576",
+    "name": "Demo Manager",
+    "role": "manager",
+    "active": true,
+    "created_date": "2026-10-26T09:10:39.848Z"
+   },
+   "device": {
+    "_id": "6adf191036bbcc7a96fba583",
+    "name": "Demo"
+   },
+   "open": true,
+   "open_now": {
+    "open": true,
+    "next": null
+   },
+   "read_only": false,
+   "counts": {
+    "open": 5,
+    "new": 3,
+    "today_orders": 6,
+    "today_total": 36.5,
+    "products": 8,
+    "customers": 0
+   }
+  }
+ },
+ "GET /api/tspos/orders?view=open": {
+  "success": true,
+  "data": [
+   {
+    "_id": "6adf191036bbcc7a96fba584",
+    "no": 1,
+    "mode": "delivery",
+    "table": "",
+    "address": "Street 240, house 12",
+    "note": "",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Emma Wilson",
+     "phone": "012555402"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba56e",
+      "name": "Iced latte",
+      "price": 2.5,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 2.5
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba570",
+      "name": "Khmer iced coffee",
+      "price": 1.5,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 3
+     }
+    ],
+    "subtotal": 5.5,
+    "discount": 0,
+    "promo": "",
+    "fee": 1,
+    "total": 6.5,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "unpaid",
+     "proof": "",
+     "paid_at": null,
+     "custom": null
+    },
+    "status": "accepted",
+    "eta_min": 15,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.181Z",
+      "by": "Emma Wilson"
+     },
+     {
+      "status": "accepted",
+      "at": "2026-10-26T09:10:40.672Z",
+      "by": "Demo Manager"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.183Z"
+   },
+   {
+    "_id": "6adf191036bbcc7a96fba585",
+    "no": 2,
+    "mode": "pickup",
+    "table": "",
+    "address": "",
+    "note": "",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Chan Vanna",
+     "phone": "012555403"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba56f",
+      "name": "Iced Americano",
+      "price": 1.75,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 1.75
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba571",
+      "name": "Green tea latte",
+      "price": 2.25,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 4.5
+     }
+    ],
+    "subtotal": 6.25,
+    "discount": 0,
+    "promo": "",
+    "fee": 0,
+    "total": 6.25,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "unpaid",
+     "proof": "",
+     "paid_at": null,
+     "custom": null
+    },
+    "status": "ready",
+    "eta_min": 0,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.185Z",
+      "by": "Chan Vanna"
+     },
+     {
+      "status": "accepted",
+      "at": "2026-10-26T09:10:40.690Z",
+      "by": "Demo Manager"
+     },
+     {
+      "status": "ready",
+      "at": "2026-10-26T09:10:40.706Z",
+      "by": "Demo Manager"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.186Z"
+   },
+   {
+    "_id": "6adf191036bbcc7a96fba5a0",
+    "no": 4,
+    "mode": "delivery",
+    "table": "",
+    "address": "Street 240, house 12",
+    "note": "",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Emma Wilson",
+     "phone": "012555402"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba56e",
+      "name": "Iced latte",
+      "price": 2.5,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 2.5
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba570",
+      "name": "Khmer iced coffee",
+      "price": 1.5,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 3
+     }
+    ],
+    "subtotal": 5.5,
+    "discount": 0,
+    "promo": "",
+    "fee": 1,
+    "total": 6.5,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "unpaid",
+     "proof": "",
+     "paid_at": null,
+     "custom": null
+    },
+    "status": "new",
+    "eta_min": 0,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.760Z",
+      "by": "Emma Wilson"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.761Z"
+   },
+   {
+    "_id": "6adf191036bbcc7a96fba5a1",
+    "no": 5,
+    "mode": "pickup",
+    "table": "",
+    "address": "",
+    "note": "",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Chan Vanna",
+     "phone": "012555403"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba56f",
+      "name": "Iced Americano",
+      "price": 1.75,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 1.75
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba571",
+      "name": "Green tea latte",
+      "price": 2.25,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 4.5
+     }
+    ],
+    "subtotal": 6.25,
+    "discount": 0,
+    "promo": "",
+    "fee": 0,
+    "total": 6.25,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "unpaid",
+     "proof": "",
+     "paid_at": null,
+     "custom": null
+    },
+    "status": "new",
+    "eta_min": 0,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.768Z",
+      "by": "Chan Vanna"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.769Z"
+   },
+   {
+    "_id": "6adf191036bbcc7a96fba5a2",
+    "no": 6,
+    "mode": "pickup",
+    "table": "",
+    "address": "",
+    "note": "Less sugar please",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Sok Dara",
+     "phone": "012555401"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba570",
+      "name": "Khmer iced coffee",
+      "price": 1.5,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 1.5
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba572",
+      "name": "Passion fruit soda",
+      "price": 2,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 4
+     }
+    ],
+    "subtotal": 5.5,
+    "discount": 0,
+    "promo": "",
+    "fee": 0,
+    "total": 5.5,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "unpaid",
+     "proof": "",
+     "paid_at": null,
+     "custom": null
+    },
+    "status": "new",
+    "eta_min": 0,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.771Z",
+      "by": "Sok Dara"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.773Z"
+   }
+  ],
+  "counts": {
+   "open": 5,
+   "new": 3,
+   "today_orders": 6,
+   "today_total": 36.5,
+   "products": 8,
+   "customers": 0
+  },
+  "open": true,
+  "open_now": {
+   "open": true,
+   "next": null
+  }
+ },
+ "GET /api/tspos/orders?view=done": {
+  "success": true,
+  "data": [
+   {
+    "_id": "6adf191036bbcc7a96fba586",
+    "no": 3,
+    "mode": "pickup",
+    "table": "",
+    "address": "",
+    "note": "Less sugar please",
+    "customer": {
+     "tg_id": "",
+     "username": "",
+     "name": "Sok Dara",
+     "phone": "012555401"
+    },
+    "items": [
+     {
+      "product_id": "6adf190f36bbcc7a96fba570",
+      "name": "Khmer iced coffee",
+      "price": 1.5,
+      "qty": 1,
+      "options": [],
+      "note": "",
+      "total": 1.5
+     },
+     {
+      "product_id": "6adf190f36bbcc7a96fba572",
+      "name": "Passion fruit soda",
+      "price": 2,
+      "qty": 2,
+      "options": [],
+      "note": "",
+      "total": 4
+     }
+    ],
+    "subtotal": 5.5,
+    "discount": 0,
+    "promo": "",
+    "fee": 0,
+    "total": 5.5,
+    "currency": "USD",
+    "pay": {
+     "method": "cash",
+     "status": "paid",
+     "proof": "",
+     "paid_at": "2026-10-26T09:10:40.723Z",
+     "custom": null
+    },
+    "status": "done",
+    "eta_min": 0,
+    "reason": "",
+    "timeline": [
+     {
+      "status": "new",
+      "at": "2026-10-26T09:10:40.189Z",
+      "by": "Sok Dara"
+     },
+     {
+      "status": "paid",
+      "at": "2026-10-26T09:10:40.723Z",
+      "by": "Demo Manager"
+     },
+     {
+      "status": "accepted",
+      "at": "2026-10-26T09:10:40.734Z",
+      "by": "Demo Manager"
+     },
+     {
+      "status": "done",
+      "at": "2026-10-26T09:10:40.746Z",
+      "by": "Demo Manager"
+     }
+    ],
+    "via": "web",
+    "zone": null,
+    "rider": null,
+    "riders_sent": false,
+    "from_remind": false,
+    "created_date": "2026-10-26T09:10:40.190Z"
+   }
+  ],
+  "counts": {
+   "open": 5,
+   "new": 3,
+   "today_orders": 6,
+   "today_total": 36.5,
+   "products": 8,
+   "customers": 0
+  },
+  "open": true,
+  "open_now": {
+   "open": true,
+   "next": null
+  }
+ },
+ "GET /api/tspos/products": {
+  "success": true,
+  "data": [
+   {
+    "_id": "6adf190f36bbcc7a96fba56e",
+    "category_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Iced latte",
+    "name_km": "ឡាតេទឹកកក",
+    "about": "",
+    "price": 2.5,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 0
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba56f",
+    "category_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Iced Americano",
+    "name_km": "អាមេរិកាណូទឹកកក",
+    "about": "",
+    "price": 1.75,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 1
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba570",
+    "category_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Khmer iced coffee",
+    "name_km": "កាហ្វេទឹកដោះគោ",
+    "about": "",
+    "price": 1.5,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 2
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba571",
+    "category_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Green tea latte",
+    "name_km": "តែបៃតង",
+    "about": "",
+    "price": 2.25,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 3
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba572",
+    "category_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Passion fruit soda",
+    "name_km": "សូដាផាសិន",
+    "about": "",
+    "price": 2,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 4
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba573",
+    "category_id": "6adf190f36bbcc7a96fba56d",
+    "name": "Butter croissant",
+    "name_km": "នំក្រូសង់",
+    "about": "",
+    "price": 1.8,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 5
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba574",
+    "category_id": "6adf190f36bbcc7a96fba56d",
+    "name": "Chocolate cake",
+    "name_km": "នំសូកូឡា",
+    "about": "",
+    "price": 2.5,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": true,
+    "hidden": false,
+    "sort": 6
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba575",
+    "category_id": "6adf190f36bbcc7a96fba56d",
+    "name": "Banana bread",
+    "name_km": "នំចេក",
+    "about": "",
+    "price": 1.5,
+    "photo": "",
+    "options": [],
+    "stock": null,
+    "sold_out": false,
+    "hidden": false,
+    "sort": 7
+   }
+  ],
+  "categories": [
+   {
+    "_id": "6adf190f36bbcc7a96fba56c",
+    "name": "Coffee & tea",
+    "name_km": "កាហ្វេ និងតែ"
+   },
+   {
+    "_id": "6adf190f36bbcc7a96fba56d",
+    "name": "Cakes",
+    "name_km": "នំ"
+   }
+  ]
+ },
+ "GET /api/tspos/today": {
+  "success": true,
+  "data": {
+   "orders": 6,
+   "total": 36.5,
+   "paid": 5.5,
+   "by_pay": {
+    "cash": 36.5
+   },
+   "by_mode": {
+    "pickup": 23.5,
+    "delivery": 13
+   },
+   "currency": "USD"
+  }
+ },
+ "_meta": {
+  "day": "2026-10-26",
+  "made": "2026-10-26T09:10:40.851Z"
+ }
+}

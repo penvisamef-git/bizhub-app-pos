@@ -6,6 +6,7 @@ import '../../core/app_state.dart';
 import '../../core/pos_api.dart';
 import '../../core/theme.dart';
 import '../event/ev_api.dart' show EvDoor, EvStore;
+import '../tgstore/ts_api.dart' show TsPos, TsStore;
 import '../guesthouse/engine/gh_pos.dart';
 import '../mart/engine/mart_pos.dart';
 import 'demo_link.dart';
@@ -48,7 +49,19 @@ class _LinkPageState extends State<LinkPage> {
       _error = '';
     });
     try {
-      final name = _name.text.trim().isEmpty ? (widget.kind == 'event' ? t('evd.phoneNamePh') : 'POS') : _name.text.trim();
+      final name = _name.text.trim().isEmpty ? (widget.kind == 'event' ? t('evd.phoneNamePh') : (widget.kind == 'tg_store' ? t('tsx.screenNamePh') : 'POS')) : _name.text.trim();
+      if (widget.kind == 'tg_store') {
+        // Telegram Store: a staff screen of the shop; each staff member logs in with a PIN next
+        final d = obj((await TsPos.pair(_code, name))['data']);
+        final shop = obj(d['shop']);
+        await TsStore.init();
+        TsStore.clear();
+        AppState.i.linked({'kind': 'tg_store', 'token': str(d['token']), 'device': {'name': name}, 'shop': str(shop['name']), 'logo': str(shop['logo']), 'linked_at': DateTime.now().toIso8601String()});
+        if (!mounted) return;
+        toast(context, t('link.done', {'shop': str(shop['name'])}));
+        Navigator.of(context).popUntil((r) => r.isFirst);
+        return;
+      }
       if (widget.kind == 'event') {
         // Event Tickets: a door phone of the organiser; each team member logs in with a PIN next
         final d = obj((await EvDoor.pair(_code, name))['data']);
@@ -200,7 +213,7 @@ class _LinkPageState extends State<LinkPage> {
                   ],
                 ),
                 const SizedBox(height: 18),
-                Field(label: t('link.name'), controller: _name, hint: widget.kind == 'event' ? t('evd.phoneNamePh') : t('link.namePh'), maxLength: 40),
+                Field(label: t('link.name'), controller: _name, hint: widget.kind == 'event' ? t('evd.phoneNamePh') : (widget.kind == 'tg_store' ? t('tsx.screenNamePh') : t('link.namePh')), maxLength: 40),
                 const SizedBox(height: 16),
                 Btn(_busy ? t('link.going') : t('link.go'), icon: LucideIcons.link, busy: _busy, expand: true, onTap: _code.length == 6 && !_busy ? _link : null),
                 DemoTry(widget.kind),

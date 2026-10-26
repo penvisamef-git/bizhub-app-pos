@@ -15,6 +15,7 @@ import 'features/restaurant/rest_main.dart';
 import 'features/stamp/sc_root.dart';
 import 'features/start/choose_page.dart';
 import 'features/start/welcome_page.dart';
+import 'features/tgstore/ts_root.dart';
 
 // BizHub POS — the counter app for staff. Works on the device first, syncs with Biz Hub when online.
 //   first time: 4 welcome pages → choose the POS → type the link code → that POS
@@ -71,6 +72,7 @@ class PosApp extends StatelessWidget {
               'guest_house' => const GhRoot(),
               'stamp_card' => const StampDeskRoot(),
               'event' => const EvDoorRoot(),
+              'tg_store' => const TsStaffRoot(),
               'attendance' => app.link?['mode'] == 'kiosk' ? const AttKioskRoot() : const AttStaffRoot(),
               _ => const ChoosePage(),
             },

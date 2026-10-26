@@ -164,6 +164,7 @@ class Brand {
     'debt_book': [Color(0xFFBE123C), Color(0xFFF97316)],
     'stamp_card': [Color(0xFF92400E), Color(0xFFF59E0B)],
     'event': [Color(0xFF9D174D), Color(0xFFF0662B)],
+    'tg_store': [Color(0xFF0B77C2), Color(0xFF2AABEE)],
   };
 }
 
