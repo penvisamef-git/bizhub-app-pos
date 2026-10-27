@@ -1,0 +1,63 @@
+# Build BizHub POS for Mac on GitHub's Mac machine → the .dmg to download (free: this repo is public).
+#   Actions → "Build Mac" → Run workflow → server: uat (a test build) or production (for the homepage download)
+#   The result: the run's "BizHub-POS-Mac-<server>" artifact = BizHub-POS-<version>[-uat].dmg (Apple silicon + Intel).
+# Needs the repository secrets (Settings → Secrets and variables → Actions):
+#   ENV_JSON        the whole env.json      (UAT)         — for server: uat
+#   ENV_PROD_JSON   the whole env.prod.json (production)  — for server: production (the same one "Build Windows" uses)
+# Not signed yet (no Apple Developer ID): it opens with right-click → Open the first time, like the Windows build
+# before signing. tool/build_macos.sh does the work, the same as on Mr Black's Mac.
+name: Build Mac
+
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Which server the app talks to"
+        type: choice
+        options: [uat, production]
+        default: uat
+
+jobs:
+  mac:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Server settings (from the ${{ inputs.server == 'production' && 'ENV_PROD_JSON' || 'ENV_JSON' }} secret)
+        env:
+          SERVER: ${{ inputs.server }}
+          ENV_JSON: ${{ secrets.ENV_JSON }}
+          ENV_PROD_JSON: ${{ secrets.ENV_PROD_JSON }}
+        run: |
+          if [[ "$SERVER" == "production" ]]; then
+            [[ -n "$ENV_PROD_JSON" ]] || { echo "::error::Add the repository secret ENV_PROD_JSON (the contents of env.prod.json)."; exit 1; }
+            printf '%s' "$ENV_PROD_JSON" > env.prod.json
+            echo "ENV_FILE=env.prod.json" >> "$GITHUB_ENV"
+          else
+            [[ -n "$ENV_JSON" ]] || { echo "::error::Add the repository secret ENV_JSON (the contents of env.json, the UAT settings)."; exit 1; }
+            printf '%s' "$ENV_JSON" > env.json
+            echo "ENV_FILE=env.json" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build the app + the .dmg
+        run: |
+          flutter --version
+          flutter pub get
+          tool/build_macos.sh
+
+      - name: Remove the settings files
+        if: always()
+        run: rm -f env.json env.prod.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BizHub-POS-Mac-${{ inputs.server }}
+          path: build/dmg/*.dmg
+          if-no-files-found: error
+          retention-days: 30

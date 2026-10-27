@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Build BizHub POS for Mac (production settings) and pack it as a .dmg ("drag to Applications").
 #
-#   tool/build_macos.sh                       build/dmg/BizHub-POS-<version>.dmg
+#   tool/build_macos.sh                       build/dmg/BizHub-POS-<version>.dmg        (production API)
+#   ENV_FILE=env.json tool/build_macos.sh     build/dmg/BizHub-POS-<version>-uat.dmg    (a test build on UAT)
+#   GitHub's Mac builds it too: Actions → "Build Mac" → Run workflow (.github/workflows/macos.yml)
 #
 # Optional, once the Apple Developer account is active (so other Macs open it without a warning):
 #   SIGN_ID="Developer ID Application: <Name> (<TEAM ID>)"   sign the app and the .dmg with that certificate
@@ -15,13 +17,20 @@ cd "$(dirname "$0")/.."
 
 [[ "$(uname)" == "Darwin" ]] || { echo "✗ A .dmg can only be made on a Mac."; exit 1; }
 [[ -d macos ]] || { echo "✗ The macos/ folder is missing."; exit 1; }
-[[ -f env.prod.json ]] || { echo "✗ env.prod.json is missing (production settings)."; exit 1; }
-grep -q '"API_HOST": *"https://bizhub-api-eight-production.vercel.app"' env.prod.json || { echo "✗ env.prod.json does not point at the production API."; exit 1; }
+env_file=${ENV_FILE:-env.prod.json}
+[[ -f "$env_file" ]] || { echo "✗ $env_file is missing (the server settings)."; exit 1; }
+if [[ "$env_file" == "env.prod.json" ]]; then
+  grep -q '"API_HOST": *"https://bizhub-api-eight-production.vercel.app"' "$env_file" || { echo "✗ env.prod.json does not point at the production API."; exit 1; }
+  server=production; suffix=""
+else
+  grep -q '"API_HOST": *"https://bizhub-api-eight-production.vercel.app"' "$env_file" && { echo "✗ $env_file points at production — use env.prod.json for that."; exit 1; }
+  server=uat; suffix="-uat"
+fi
 
 version=$(grep -E '^version: ' pubspec.yaml | sed 's/version: //')
 name=${version%%+*}
-echo "• building BizHub POS $version for Mac (production)…"
-flutter build macos --release --dart-define-from-file=env.prod.json
+echo "• building BizHub POS $version for Mac ($server)…"
+flutter build macos --release --dart-define-from-file="$env_file"
 
 app="build/macos/Build/Products/Release/BizHub POS.app"
 [[ -d "$app" ]] || { echo "✗ build finished but \"$app\" is missing"; exit 1; }
@@ -33,7 +42,7 @@ if [[ -n "${SIGN_ID:-}" ]]; then
 fi
 
 out=build/dmg
-dmg="$out/BizHub-POS-$name.dmg"
+dmg="$out/BizHub-POS-$name$suffix.dmg"
 stage="$out/stage"
 rm -rf "$stage" "$dmg"
 mkdir -p "$stage"
@@ -53,7 +62,7 @@ if [[ -n "${SIGN_ID:-}" ]]; then
 fi
 
 echo
-echo "✓ $dmg  ($(du -h "$dmg" | cut -f1), version $version)"
+echo "✓ $dmg  ($(du -h "$dmg" | cut -f1), version $version, $server)"
 if [[ -z "${SIGN_ID:-}" ]]; then
   echo "  Not signed yet: it opens on this Mac. On another Mac, right-click the app → Open the first time"
   echo "  (or System Settings → Privacy & Security → Open Anyway). Sign + notarize once the Apple account is active."
