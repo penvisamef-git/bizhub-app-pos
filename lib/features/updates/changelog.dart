@@ -41,6 +41,11 @@ const changelog = <Release>[
         'ពាក្យឆ្លាតវៃ៖ “ការកម្ម៉ង់ថ្មី” “មិនទាន់បង់ ថ្ងៃនេះ” “អស់ស្តុក” “ស្តុកតិច” “ភ្ញៀវកំពុងស្នាក់” បង្ហាញពីអាជីវកម្មទាំងអស់របស់អ្នក។',
       ),
       Change(
+        'new',
+        'Bizi tells you first: a short summary once a day (yesterday\'s money, this week vs last week), a red dot and a worried face when something waits (new orders, payments to check, guests past check-out, sold out, renewals), and a happy face when a sale comes in.',
+        'Bizi ប្រាប់អ្នកមុន៖ សេចក្តីសង្ខេបខ្លីមួយដងក្នុងមួយថ្ងៃ (លុយម្សិលមិញ សប្តាហ៍នេះធៀបនឹងសប្តាហ៍មុន) ចំណុចក្រហម និងមុខបារម្ភពេលមានអ្វីរង់ចាំ (ការកម្ម៉ង់ថ្មី ការបង់ត្រូវពិនិត្យ ភ្ញៀវហួសម៉ោងចេញ អស់ស្តុក ការបន្ត) និងមុខសប្បាយពេលមានការលក់។',
+      ),
+      Change(
         'better',
         'Search understands words in any order, more words for each page (“fee”, “printer”, “top up”), small typing mistakes (“cofee”), and shows your recent picks.',
         'ការស្វែងរកយល់ពាក្យតាមលំដាប់ណាក៏បាន ពាក្យបន្ថែមសម្រាប់ទំព័រនីមួយៗ (“ថ្លៃដឹក” “ម៉ាស៊ីនបោះពុម្ព” “បញ្ចូលកាក់”) កំហុសវាយតូចៗ និងបង្ហាញអ្វីដែលអ្នកបានបើកថ្មីៗ។',
