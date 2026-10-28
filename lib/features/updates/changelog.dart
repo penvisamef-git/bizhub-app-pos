@@ -50,6 +50,11 @@ const changelog = <Release>[
         'Search understands words in any order, more words for each page (“fee”, “printer”, “top up”), small typing mistakes (“cofee”), and shows your recent picks.',
         'ការស្វែងរកយល់ពាក្យតាមលំដាប់ណាក៏បាន ពាក្យបន្ថែមសម្រាប់ទំព័រនីមួយៗ (“ថ្លៃដឹក” “ម៉ាស៊ីនបោះពុម្ព” “បញ្ចូលកាក់”) កំហុសវាយតូចៗ និងបង្ហាញអ្វីដែលអ្នកបានបើកថ្មីៗ។',
       ),
+      Change(
+        'better',
+        'The dashboard now counts Telegram Store orders too: sales today, this week, the 14-day chart, best sellers, and new orders under Right now.',
+        'ផ្ទាំងគ្រប់គ្រងរាប់ការកម្ម៉ង់ហាង Telegram ផងដែរ៖ ការលក់ថ្ងៃនេះ សប្តាហ៍នេះ តារាង 14 ថ្ងៃ ទំនិញលក់ដាច់ និងការកម្ម៉ង់ថ្មីនៅក្រោម ពេលនេះ។',
+      ),
     ],
   ),
   Release(
