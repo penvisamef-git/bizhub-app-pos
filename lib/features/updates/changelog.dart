@@ -51,6 +51,11 @@ const changelog = <Release>[
         'ការស្វែងរកយល់ពាក្យតាមលំដាប់ណាក៏បាន ពាក្យបន្ថែមសម្រាប់ទំព័រនីមួយៗ (“ថ្លៃដឹក” “ម៉ាស៊ីនបោះពុម្ព” “បញ្ចូលកាក់”) កំហុសវាយតូចៗ និងបង្ហាញអ្វីដែលអ្នកបានបើកថ្មីៗ។',
       ),
       Change(
+        'new',
+        'Ask Bizi how to do things: “how do I pair a POS?”, “how to buy coins”, “ថ្លៃដឹក” — the steps with the real button names, and a button that opens that page in your business.',
+        'សួរ Bizi ពីរបៀបធ្វើ៖ “តើភ្ជាប់ POS យ៉ាងម៉េច?” “ទិញកាក់” “ថ្លៃដឹក” — ជំហានជាមួយឈ្មោះប៊ូតុងពិតៗ និងប៊ូតុងបើកទំព័រនោះក្នុងអាជីវកម្មរបស់អ្នក។',
+      ),
+      Change(
         'better',
         'The dashboard now counts Telegram Store orders too: sales today, this week, the 14-day chart, best sellers, and new orders under Right now.',
         'ផ្ទាំងគ្រប់គ្រងរាប់ការកម្ម៉ង់ហាង Telegram ផងដែរ៖ ការលក់ថ្ងៃនេះ សប្តាហ៍នេះ តារាង 14 ថ្ងៃ ទំនិញលក់ដាច់ និងការកម្ម៉ង់ថ្មីនៅក្រោម ពេលនេះ។',

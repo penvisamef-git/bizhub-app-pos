@@ -86,7 +86,8 @@ void main() {
       await t.tap(link);
       await settle(t);
       expect(find.byKey(ValueKey('up-v-$bizhubVersion')), findsOneWidget);
-      expect(find.text(lang == 'km' ? 'ហាង Telegram' : 'Telegram Store'), findsOneWidget);
+      // the newest version's title is at the top (the older ones further down)
+      expect(find.text(lang == 'km' ? changelog.first.titleKm : changelog.first.titleEn), findsOneWidget);
       await shot(t, 'up-page-$lang');
     });
   }
