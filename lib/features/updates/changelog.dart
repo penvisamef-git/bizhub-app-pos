@@ -72,6 +72,11 @@ const changelog = <Release>[
       ),
       Change(
         'new',
+        'Search by voice: tap the microphone in Bizi\'s box and say it — “ការកម្ម៉ង់ថ្មី”, “how do I pair a POS”. It uses your phone\'s or browser\'s own speech-to-text (Khmer where it has it).',
+        'ស្វែងរកដោយសំឡេង៖ ចុចមីក្រូហ្វូនក្នុងប្រអប់ Bizi ហើយនិយាយ — “ការកម្ម៉ង់ថ្មី” “តើភ្ជាប់ POS យ៉ាងម៉េច”។ ប្រើការបំប្លែងសំឡេងរបស់ទូរស័ព្ទ ឬកម្មវិធីរុករករបស់អ្នក (ភាសាខ្មែរបើវាមាន)។',
+      ),
+      Change(
+        'new',
         'Do it from Bizi: Accept, Done, Paid on a Telegram order, Sold out / Back on sale on a product, Approve a ticket payment — or type it: “#12 paid”, “accept #12”, “sold out iced coffee”. Bizi always asks first.',
         'ធ្វើពី Bizi៖ ទទួល បានបញ្ចប់ បានបង់ លើការកម្ម៉ង់ Telegram អស់ / មានលក់វិញ លើទំនិញ អនុម័តការបង់សំបុត្រ — ឬវាយ៖ “#12 បានបង់” “ទទួល #12”។ Bizi តែងតែសួរជាមុនសិន។',
       ),
