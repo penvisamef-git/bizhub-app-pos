@@ -13,9 +13,36 @@ class Release {
 }
 
 // the BizHub version (the newest in the list) — the same number the website shows
-const bizhubVersion = '3.1.0';
+const bizhubVersion = '3.2.0';
 
 const changelog = <Release>[
+  Release(
+    version: '3.2.0',
+    status: 'testing',
+    date: '2026-10',
+    titleEn: 'Follow BizHub · Bizi on the homepage',
+    titleKm: 'តាមដាន BizHub · Bizi លើគេហទំព័រដើម',
+    subEn: 'BizHub\'s channels on the homepage, and Bizi says hello to visitors before they sign up.',
+    subKm: 'ប៉ុស្តិ៍របស់ BizHub លើគេហទំព័រដើម ហើយ Bizi ស្វាគមន៍ភ្ញៀវមុនពេលពួកគេចុះឈ្មោះ។',
+    items: [
+      Change(
+        'new',
+        '“Follow BizHub” on the homepage: Facebook, TikTok, YouTube, CoolApp and our Telegram channel — and small icons in the footer.',
+        '“តាមដាន BizHub” លើគេហទំព័រដើម៖ Facebook TikTok YouTube CoolApp និងប៉ុស្តិ៍ Telegram របស់យើង — និងរូបតំណាងតូចៗនៅខាងក្រោម។',
+      ),
+      Change(
+        'new',
+        '“Meet Bizi” on the homepage: what Bizi does, with a small box where Bizi works by itself on a sample shop.',
+        '“ស្គាល់ Bizi” លើគេហទំព័រដើម៖ អ្វីដែល Bizi ធ្វើ ជាមួយប្រអប់តូចមួយដែល Bizi ធ្វើការដោយខ្លួនឯងលើហាងគំរូ។',
+      ),
+      Change(
+        'new',
+        'Bizi helps visitors too: tap Bizi in the corner of the homepage and ask about prices, the POS, Telegram or how to start — then sign up or chat with the BizHub team.',
+        'Bizi ក៏ជួយភ្ញៀវដែរ៖ ចុច Bizi នៅជ្រុងគេហទំព័រដើម ហើយសួរអំពីតម្លៃ POS Telegram ឬរបៀបចាប់ផ្តើម — រួចចុះឈ្មោះ ឬជជែកជាមួយក្រុមការងារ BizHub។',
+      ),
+      Change('better', 'Super admin: the channel links are in Homepage settings — an empty link hides that button.', 'Super admin៖ តំណប៉ុស្តិ៍នៅក្នុងការកំណត់គេហទំព័រដើម — តំណទទេ នឹងលាក់ប៊ូតុងនោះ។'),
+    ],
+  ),
   Release(
     version: '3.1.0',
     status: 'testing',
