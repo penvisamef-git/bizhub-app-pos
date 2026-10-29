@@ -72,6 +72,11 @@ const changelog = <Release>[
       ),
       Change(
         'new',
+        'Do it from Bizi: Accept, Done, Paid on a Telegram order, Sold out / Back on sale on a product, Approve a ticket payment — or type it: “#12 paid”, “accept #12”, “sold out iced coffee”. Bizi always asks first.',
+        'ធ្វើពី Bizi៖ ទទួល បានបញ្ចប់ បានបង់ លើការកម្ម៉ង់ Telegram អស់ / មានលក់វិញ លើទំនិញ អនុម័តការបង់សំបុត្រ — ឬវាយ៖ “#12 បានបង់” “ទទួល #12”។ Bizi តែងតែសួរជាមុនសិន។',
+      ),
+      Change(
+        'new',
         'Bizi on Telegram (free): connect your own Telegram in Bizi settings — a morning summary at 8:00, last week\'s report on Monday, and a message when an order or a guest waits, even when BizHub is closed.',
         'Bizi នៅលើ Telegram (ឥតគិតថ្លៃ)៖ ភ្ជាប់ Telegram របស់អ្នកក្នុងការកំណត់ Bizi — សេចក្តីសង្ខេបនៅម៉ោង 8:00 របាយការណ៍សប្តាហ៍មុននៅថ្ងៃច័ន្ទ និងសារពេលមានការកម្ម៉ង់ ឬភ្ញៀវរង់ចាំ ទោះបិទ BizHub ក៏ដោយ។',
       ),
