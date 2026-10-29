@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/desktop.dart';
+import '../../core/pos_split.dart';
 import '../../core/app_state.dart';
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
@@ -160,18 +161,19 @@ class _OrderPageState extends State<OrderPage> {
               backgroundColor: c.appBg,
               body: SafeArea(
                 child: big
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(child: menu),
-                          Container(
-                            width: 400,
-                            margin: const EdgeInsets.fromLTRB(0, 10, 12, 12),
-                            decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(24), boxShadow: c.cardShadow),
-                            clipBehavior: Clip.antiAlias,
-                            child: ticket,
-                          ),
-                        ],
+                    ? PosSplit(
+                        scope: 'rest',
+                        who: js(pos.staff?['_id']),
+                        whoName: js(pos.staff?['name']),
+                        thing: 'order',
+                        main: menu,
+                        // the cashier moves it: wider / narrower, left / right (kept for them on this device)
+                        panel: (left) => Container(
+                          margin: left ? const EdgeInsets.fromLTRB(12, 10, 0, 12) : const EdgeInsets.fromLTRB(0, 10, 12, 12),
+                          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(24), boxShadow: c.cardShadow),
+                          clipBehavior: Clip.antiAlias,
+                          child: ticket,
+                        ),
                       )
                     : (_ticketTab ? ticket : menu),
               ),

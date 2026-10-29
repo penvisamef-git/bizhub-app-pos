@@ -13,9 +13,35 @@ class Release {
 }
 
 // the BizHub version (the newest in the list) — the same number the website shows
-const bizhubVersion = '3.0.0';
+const bizhubVersion = '3.1.0';
 
 const changelog = <Release>[
+  Release(
+    version: '3.1.0',
+    status: 'testing',
+    date: '2026-10',
+    titleEn: 'Move the cart your way',
+    titleKm: 'រៀបចំកន្ត្រកតាមចិត្ត',
+    subEn: 'On the Restaurant and Mini Mart POS, each cashier makes the cart wider or narrower and puts it on the left or the right.',
+    subKm: 'នៅលើ POS ភោជនីយដ្ឋាន និងហាងលក់ទំនិញ អ្នកគិតលុយម្នាក់ៗអាចធ្វើឲ្យកន្ត្រកធំ ឬតូច ហើយដាក់វានៅខាងឆ្វេង ឬខាងស្តាំ។',
+    items: [
+      Change(
+        'new',
+        'Drag the line between the products and the cart (the Restaurant order or the Mini Mart cart) to make it wider or narrower — on the website POS, the BizHub POS app, Mac and Windows.',
+        'អូសបន្ទាត់រវាងទំនិញ និងកន្ត្រក (ការកុម្ម៉ង់ភោជនីយដ្ឋាន ឬកន្ត្រកហាងលក់ទំនិញ) ដើម្បីធ្វើឲ្យវាធំ ឬតូច — លើ POS គេហទំព័រ កម្មវិធី BizHub POS Mac និង Windows។',
+      ),
+      Change(
+        'new',
+        'Tap the line: Small, Medium or Large, put the cart on the left or the right, or back to normal. Double-tap it to go back to normal.',
+        'ចុចលើបន្ទាត់៖ តូច មធ្យម ឬធំ ដាក់កន្ត្រកនៅខាងឆ្វេង ឬខាងស្តាំ ឬត្រឡប់ដូចដើម។ ចុចពីរដងដើម្បីត្រឡប់ដូចដើម។',
+      ),
+      Change(
+        'better',
+        'Each cashier keeps their own choice on each device — a small laptop and a big screen can be set up differently. The products always keep at least 2 columns, and phones keep the cart button as before.',
+        'អ្នកគិតលុយម្នាក់ៗរក្សាជម្រើសផ្ទាល់ខ្លួនលើឧបករណ៍នីមួយៗ — កុំព្យូទ័រតូច និងអេក្រង់ធំអាចរៀបចំខុសគ្នា។ ទំនិញតែងតែមានយ៉ាងហោចណាស់ 2 ជួរ ហើយទូរស័ព្ទនៅតែមានប៊ូតុងកន្ត្រកដូចមុន។',
+      ),
+    ],
+  ),
   Release(
     version: '3.0.0',
     status: 'testing',

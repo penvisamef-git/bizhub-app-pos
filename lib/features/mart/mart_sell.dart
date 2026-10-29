@@ -9,6 +9,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../core/api.dart' show ApiError;
 import '../../core/app_state.dart';
 import '../../core/desktop.dart';
+import '../../core/pos_split.dart';
 import '../../core/format.dart' as f;
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
@@ -234,18 +235,19 @@ class MartSellState extends State<MartSell> {
           return DesktopKeys(
             autofocus: false,
             keys: keys,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(child: left),
-                Container(
-                  width: 400,
-                  margin: const EdgeInsets.fromLTRB(0, 0, 12, 12),
-                  decoration: BoxDecoration(color: context.c.card, borderRadius: BorderRadius.circular(22), boxShadow: context.c.cardShadow),
-                  clipBehavior: Clip.antiAlias,
-                  child: cartView,
-                ),
-              ],
+            child: PosSplit(
+              scope: 'mart',
+              who: js(pos.staff['_id']),
+              whoName: js(pos.staff['name']),
+              thing: 'cart',
+              main: left,
+              // the cashier moves it: wider / narrower, left / right (kept for them on this device)
+              panel: (onLeft) => Container(
+                margin: onLeft ? const EdgeInsets.fromLTRB(12, 0, 0, 12) : const EdgeInsets.fromLTRB(0, 0, 12, 12),
+                decoration: BoxDecoration(color: context.c.card, borderRadius: BorderRadius.circular(22), boxShadow: context.c.cardShadow),
+                clipBehavior: Clip.antiAlias,
+                child: cartView,
+              ),
             ),
           );
         }

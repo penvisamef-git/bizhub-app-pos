@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/app_state.dart';
+import '../../core/pos_split.dart' show posCartLeft;
 import '../../core/theme.dart';
 import 'bizi_face.dart';
 import 'pos_bizi_find.dart';
@@ -44,9 +45,20 @@ class _PosBiziState extends State<PosBizi> {
   bool _dragging = false;
   bool _open = false;
 
+  void _cartMoved() {
+    if (mounted && _pos == null) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    posCartLeft.removeListener(_cartMoved);
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    posCartLeft.addListener(_cartMoved);
     try {
       final v = jsonDecode(AppState.i.pref(_posKey) ?? 'null');
       if (v is Map && v['x'] is num && v['y'] is num) _pos = Offset((v['x'] as num).toDouble(), (v['y'] as num).toDouble());
@@ -58,7 +70,8 @@ class _PosBiziState extends State<PosBizi> {
     final maxY = s.height - _size - _edge - pad.bottom;
     // first time: on the left, above the bottom bars (a mini mart's cart bar too), away from the pay buttons on the
     // right; the event door keeps the code field under the camera free, so higher there
-    if (_pos == null) return Offset(_edge + 8 + pad.left, widget.kind == 'event' ? s.height * .3 : maxY - 150);
+    // (a cashier who put the cart on the left: the bubble starts on the right instead)
+    if (_pos == null) return Offset(posCartLeft.value ? maxX - 8 - pad.right : _edge + 8 + pad.left, widget.kind == 'event' ? s.height * .3 : maxY - 150);
     return Offset((_pos!.dx * s.width).clamp(_edge, maxX), (_pos!.dy * s.height).clamp(_edge + pad.top, maxY));
   }
 
