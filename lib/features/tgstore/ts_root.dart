@@ -15,6 +15,7 @@ import '../bizi/pos_bizi.dart';
 import 'ts_card.dart';
 import 'ts_print.dart';
 import '../updates/updates_page.dart';
+import '../../core/powered_by.dart';
 
 // Telegram Store staff screen (web: /pos/tg-store): paired with the owner's 6-digit code (link page) → each staff
 // member's PIN → orders come in with a sound: New · Making · Ready, accept / reject / ready / done / paid, print a ticket;
@@ -328,6 +329,7 @@ class _TsPinPageState extends State<TsPinPage> {
                           icon: Icon(LucideIcons.unlink, size: 15, color: c.muted),
                           label: Text(tsx('unpair'), style: TextStyle(color: c.muted)),
                         ),
+                        const PoweredBy(),
                       ],
                     ),
                   ),

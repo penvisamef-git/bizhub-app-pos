@@ -20,6 +20,7 @@ import 'mart_shift.dart';
 import 'mart_stock.dart';
 import '../updates/updates_page.dart';
 import '../updates/changelog.dart' show bizhubVersion;
+import '../../core/powered_by.dart';
 
 // The Mini Mart POS in the app: PIN → (count the drawer) → sell. Works offline like the web's /pos/mini-mart.
 class MartRoot extends StatefulWidget {
@@ -260,6 +261,7 @@ class _MartPinState extends State<MartPin> {
                         label: Text(t('mpos.unlink')),
                       ),
                     ),
+                  const PoweredBy(),
                 ],
               ),
             ),
@@ -500,6 +502,7 @@ class _MartMainState extends State<MartMain> {
               Navigator.pop(ctx);
               widget.onLock();
             }),
+            const PoweredBy(),
           ],
         );
       },

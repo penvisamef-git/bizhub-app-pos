@@ -13,6 +13,7 @@ import 'sc_common.dart';
 import 'sc_desk.dart';
 import '../updates/updates_page.dart';
 import '../updates/changelog.dart' show bizhubVersion;
+import '../../core/powered_by.dart';
 
 // …/stamp/desk/<slug> or the bare slug
 String? parseDeskLink(String v) {
@@ -590,6 +591,7 @@ class _PinState extends State<_Pin> {
                 Center(
                   child: TextButton(onPressed: widget.onUnlink, child: Text(t('st.unlink'))),
                 ),
+                const PoweredBy(),
               ],
             ),
           ),

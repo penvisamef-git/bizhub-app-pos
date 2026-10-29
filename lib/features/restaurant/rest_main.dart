@@ -18,6 +18,7 @@ import 'rest_shift.dart';
 import 'rest_start.dart';
 import '../updates/updates_page.dart';
 import '../updates/changelog.dart' show bizhubVersion;
+import '../../core/powered_by.dart';
 
 // time at the table: 05:12 → 1:05:12
 String elapsed(Object? at, DateTime now) {
@@ -298,6 +299,7 @@ class _TopBar extends StatelessWidget {
                 Navigator.pop(ctx);
                 showUnlink(context);
               }, danger: true),
+              const PoweredBy(),
             ],
           );
         },

@@ -11,6 +11,7 @@ import '../guesthouse/engine/gh_pos.dart';
 import '../mart/engine/mart_pos.dart';
 import 'demo_link.dart';
 import '../../widgets/ui.dart';
+import '../../core/powered_by.dart';
 
 // Type the 6-digit code the owner made in Biz Hub → this device is linked to that business.
 class LinkPage extends StatefulWidget {
@@ -216,6 +217,7 @@ class _LinkPageState extends State<LinkPage> {
                 Field(label: t('link.name'), controller: _name, hint: widget.kind == 'event' ? t('evd.phoneNamePh') : (widget.kind == 'tg_store' ? t('tsx.screenNamePh') : t('link.namePh')), maxLength: 40),
                 const SizedBox(height: 16),
                 Btn(_busy ? t('link.going') : t('link.go'), icon: LucideIcons.link, busy: _busy, expand: true, onTap: _code.length == 6 && !_busy ? _link : null),
+                const PoweredBy(),
                 DemoTry(widget.kind),
                 const SizedBox(height: 8),
                 Center(

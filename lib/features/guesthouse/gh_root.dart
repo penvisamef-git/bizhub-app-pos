@@ -17,6 +17,7 @@ import 'gh_print.dart';
 import 'gh_today.dart';
 import '../updates/updates_page.dart';
 import '../updates/changelog.dart' show bizhubVersion;
+import '../../core/powered_by.dart';
 
 // The Guest House desk app: link → staff PIN → Today / Calendar / Bookings (+ more with the add-ons)
 class GhRoot extends StatefulWidget {
@@ -233,6 +234,7 @@ class _GhPinState extends State<GhPin> {
                         label: Text(t('ghp.unlink')),
                       ),
                     ),
+                  const PoweredBy(),
                 ],
               ),
             ),
@@ -496,6 +498,7 @@ class _GhMainState extends State<GhMain> {
               Navigator.pop(ctx);
               pos.lock();
             }),
+            const PoweredBy(),
           ],
         );
       },

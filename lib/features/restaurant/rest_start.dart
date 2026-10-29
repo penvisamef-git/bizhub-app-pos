@@ -7,6 +7,7 @@ import '../../widgets/ui.dart';
 import 'engine/calc.dart';
 import 'engine/rest_pos.dart';
 import 'pos_ui.dart';
+import '../../core/powered_by.dart';
 
 // The screens before selling: loading, no menu yet, unlinked, staff PIN, open shift.
 
@@ -120,6 +121,7 @@ class _RestNoSetupState extends State<RestNoSetup> {
         ),
         const SizedBox(height: 8),
         _LinkBtn(t('rpos.unlink'), LucideIcons.unplug, () => showUnlink(context)),
+        const PoweredBy(),
       ],
     );
   }
@@ -240,6 +242,7 @@ class _RestPinLockState extends State<RestPinLock> {
         Keypad(value: _pin, onChanged: _typed, max: 4, disabled: _busy || _error, keyHeight: 64),
         const SizedBox(height: 8),
         _LinkBtn(t('rpos.unlink'), LucideIcons.unplug, () => showUnlink(context)),
+        const PoweredBy(),
       ],
     );
   }

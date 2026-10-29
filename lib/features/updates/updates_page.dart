@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../core/app_state.dart';
 import '../../core/theme.dart';
 import 'changelog.dart';
+import '../../core/powered_by.dart';
 
 // System activity / សកម្មភាពក្នុងប្រព័ន្ធ: what changed in each BizHub version — the same list and words as the website
 // (web: dashboard/client/updates/UpdatesPage.jsx · the list: lib/features/updates/changelog.dart, made by tool/gen_changelog.js)
@@ -117,6 +118,7 @@ class UpdatesPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               for (var i = 0; i < changelog.length; i++) _Version(r: changelog[i], first: i == 0, lang: lang),
+              const Center(child: PoweredBy(padding: EdgeInsets.only(top: 18, bottom: 12))),
             ],
           ),
         ),

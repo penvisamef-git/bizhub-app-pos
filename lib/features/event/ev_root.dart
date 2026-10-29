@@ -13,6 +13,7 @@ import 'ev_print.dart';
 import 'ev_scan.dart';
 import 'ev_tabs.dart';
 import '../updates/updates_page.dart';
+import '../../core/powered_by.dart';
 
 // Event Tickets door phone (web: /pos/event): paired with the organiser's 6-digit code (link page) →
 // each team member's PIN → choose the event → Scan (works offline) · Live · Guests · Sell at the gate · Orders
@@ -347,6 +348,7 @@ class _EvPinPageState extends State<EvPinPage> {
                         ],
                       ),
                       if (_busy) const Padding(padding: EdgeInsets.only(top: 16), child: CircularProgressIndicator()),
+                      const PoweredBy(),
                     ],
                   ),
                 ),
