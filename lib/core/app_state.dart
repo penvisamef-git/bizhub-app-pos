@@ -61,6 +61,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // small per-device choices (where Bizi sits…)
+  String? pref(String key) => _p.getString(key);
+  void setPref(String key, String value) => _p.setString(key, value);
+
   void doneWelcome() {
     onboarded = true;
     _p.setBool('pos.onboarded', true);

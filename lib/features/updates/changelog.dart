@@ -72,6 +72,11 @@ const changelog = <Release>[
       ),
       Change(
         'new',
+        'Bizi in BizHub POS too: tap the helper on the counter screen and ask “the printer doesn\'t print”, “close the shift”, “void an item” — the steps for that POS, in Khmer or English; a red dot when Telegram orders wait more than 5 minutes.',
+        'Bizi ក៏មានក្នុង BizHub POS ដែរ៖ ចុចជំនួយការលើអេក្រង់លក់ ហើយសួរ “ម៉ាស៊ីនព្រីនមិនព្រីន” “បិទវេន” “លុបមុខម្ហូប” — ជំហានសម្រាប់ POS នោះ ជាភាសាខ្មែរ ឬអង់គ្លេស; ចំណុចក្រហមពេលការកម្ម៉ង់ Telegram រង់ចាំលើស 5 នាទី។',
+      ),
+      Change(
+        'new',
         'Search by voice: tap the microphone in Bizi\'s box and say it — “ការកម្ម៉ង់ថ្មី”, “how do I pair a POS”. It uses your phone\'s or browser\'s own speech-to-text (Khmer where it has it).',
         'ស្វែងរកដោយសំឡេង៖ ចុចមីក្រូហ្វូនក្នុងប្រអប់ Bizi ហើយនិយាយ — “ការកម្ម៉ង់ថ្មី” “តើភ្ជាប់ POS យ៉ាងម៉េច”។ ប្រើការបំប្លែងសំឡេងរបស់ទូរស័ព្ទ ឬកម្មវិធីរុករករបស់អ្នក (ភាសាខ្មែរបើវាមាន)។',
       ),

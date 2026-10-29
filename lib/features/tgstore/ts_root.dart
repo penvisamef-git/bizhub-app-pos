@@ -11,6 +11,7 @@ import '../../core/printing/printer_settings.dart' show printErrorMessage;
 import '../../core/theme.dart';
 import '../../widgets/ui.dart';
 import 'ts_api.dart';
+import '../bizi/pos_bizi.dart';
 import 'ts_card.dart';
 import 'ts_print.dart';
 import '../updates/updates_page.dart';
@@ -392,6 +393,7 @@ class _TsMainState extends State<TsMain> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    posBiziWaiting.value = null;
     WidgetsBinding.instance.removeObserver(this);
     WakelockPlus.disable().catchError((_) {});
     _poll?.cancel();
@@ -458,6 +460,10 @@ class _TsMainState extends State<TsMain> with WidgetsBindingObserver {
         if (_sound) TsSound.chime();
       }
       _syncRing();
+      // Bizi: new orders waiting too long (5 min+) → a red dot on the bubble
+      final now = DateTime.now();
+      final late = fresh.map((o) => DateTime.tryParse(str(o['created_date']))?.toLocal()).whereType<DateTime>().where((t) => now.difference(t).inMinutes >= 5).toList()..sort();
+      posBiziWaiting.value = late.isEmpty ? null : PosWaiting('tg_new', late.length, oldest: late.first);
     } catch (e) {
       _fail(e);
     }

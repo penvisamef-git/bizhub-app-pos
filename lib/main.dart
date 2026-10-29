@@ -6,6 +6,7 @@ import 'core/config.dart';
 import 'core/i18n.dart';
 import 'core/theme.dart';
 import 'features/attendance/att_kiosk.dart';
+import 'features/bizi/pos_bizi.dart';
 import 'features/attendance/att_staff.dart';
 import 'features/event/ev_root.dart';
 import 'features/guesthouse/gh_root.dart';
@@ -67,12 +68,13 @@ class PosApp extends StatelessWidget {
           : app.link == null
           ? const ChoosePage()
           : switch (app.kind) {
-              'restaurant' => const RestRoot(),
-              'mart' => const MartRoot(),
-              'guest_house' => const GhRoot(),
-              'stamp_card' => const StampDeskRoot(),
-              'event' => const EvDoorRoot(),
-              'tg_store' => const TsStaffRoot(),
+              // Bizi (v3.0.0): the helper bubble over each counter POS (not on a clock-in phone / door kiosk)
+              'restaurant' => const PosBizi(kind: 'restaurant', child: RestRoot()),
+              'mart' => const PosBizi(kind: 'mart', child: MartRoot()),
+              'guest_house' => const PosBizi(kind: 'guest_house', child: GhRoot()),
+              'stamp_card' => const PosBizi(kind: 'stamp_card', child: StampDeskRoot()),
+              'event' => const PosBizi(kind: 'event', child: EvDoorRoot()),
+              'tg_store' => const PosBizi(kind: 'tg_store', child: TsStaffRoot()),
               'attendance' => app.link?['mode'] == 'kiosk' ? const AttKioskRoot() : const AttStaffRoot(),
               _ => const ChoosePage(),
             },
