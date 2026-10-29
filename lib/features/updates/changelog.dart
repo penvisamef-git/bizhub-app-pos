@@ -72,6 +72,11 @@ const changelog = <Release>[
       ),
       Change(
         'new',
+        'Bizi on Telegram (free): connect your own Telegram in Bizi settings — a morning summary at 8:00, last week\'s report on Monday, and a message when an order or a guest waits, even when BizHub is closed.',
+        'Bizi នៅលើ Telegram (ឥតគិតថ្លៃ)៖ ភ្ជាប់ Telegram របស់អ្នកក្នុងការកំណត់ Bizi — សេចក្តីសង្ខេបនៅម៉ោង 8:00 របាយការណ៍សប្តាហ៍មុននៅថ្ងៃច័ន្ទ និងសារពេលមានការកម្ម៉ង់ ឬភ្ញៀវរង់ចាំ ទោះបិទ BizHub ក៏ដោយ។',
+      ),
+      Change(
+        'new',
         'Bizi settings (the gear in Bizi\'s box): choose what Bizi tells you about, turn off tips or the Monday report — the same on the website and the app.',
         'ការកំណត់ Bizi (ប៊ូតុងស្ពឺក្នុងប្រអប់ Bizi)៖ ជ្រើសអ្វីដែល Bizi ប្រាប់អ្នក បិទគន្លឹះ ឬរបាយការណ៍ថ្ងៃច័ន្ទ — ដូចគ្នាទាំងគេហទំព័រ និងកម្មវិធី។',
       ),
