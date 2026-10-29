@@ -61,6 +61,21 @@ const changelog = <Release>[
         'Bizi ក៏មាននៅក្នុងកម្មវិធី BizHub ដែរ៖ ជំនួយការដដែលនៅលើ ផ្ទាំងគ្រប់គ្រង អាជីវកម្ម កាបូប និង ច្រើនទៀត — ចុចដើម្បីស្វែងរកគ្រប់យ៉ាង និងសួររបៀបធ្វើ ចុចឱ្យជាប់ ហើយអូសដើម្បីផ្លាស់ទី; ចំណុចក្រហម សេចក្តីសង្ខេបប្រចាំថ្ងៃ និងមុខសប្បាយពេលមានការលក់ថ្មី ដូចគេហទំព័រ។',
       ),
       Change(
+        'new',
+        'Bizi points out what isn\'t set up yet — no staff Telegram group, no tables, no POS device, no rooms… — with the steps and a button to fix it, or “Not now”.',
+        'Bizi ប្រាប់ពីអ្វីដែលមិនទាន់រៀបចំ — គ្មានក្រុម Telegram បុគ្គលិក គ្មានតុ គ្មានឧបករណ៍ POS គ្មានបន្ទប់… — ជាមួយជំហាន និងប៊ូតុងដើម្បីកែ ឬ “ពេលក្រោយ”។',
+      ),
+      Change(
+        'new',
+        'Monday report: last week\'s money vs the week before, the best day, the best sellers and which business went up or down.',
+        'របាយការណ៍ថ្ងៃច័ន្ទ៖ លុយសប្តាហ៍មុនធៀបនឹងសប្តាហ៍មុននោះ ថ្ងៃល្អបំផុត ទំនិញលក់ដាច់ និងអាជីវកម្មណាកើនឡើង ឬធ្លាក់ចុះ។',
+      ),
+      Change(
+        'new',
+        'Bizi settings (the gear in Bizi\'s box): choose what Bizi tells you about, turn off tips or the Monday report — the same on the website and the app.',
+        'ការកំណត់ Bizi (ប៊ូតុងស្ពឺក្នុងប្រអប់ Bizi)៖ ជ្រើសអ្វីដែល Bizi ប្រាប់អ្នក បិទគន្លឹះ ឬរបាយការណ៍ថ្ងៃច័ន្ទ — ដូចគ្នាទាំងគេហទំព័រ និងកម្មវិធី។',
+      ),
+      Change(
         'better',
         'The dashboard now counts Telegram Store orders too: sales today, this week, the 14-day chart, best sellers, and new orders under Right now.',
         'ផ្ទាំងគ្រប់គ្រងរាប់ការកម្ម៉ង់ហាង Telegram ផងដែរ៖ ការលក់ថ្ងៃនេះ សប្តាហ៍នេះ តារាង 14 ថ្ងៃ ទំនិញលក់ដាច់ និងការកម្ម៉ង់ថ្មីនៅក្រោម ពេលនេះ។',
