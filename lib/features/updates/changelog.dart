@@ -82,8 +82,8 @@ const changelog = <Release>[
       ),
       Change(
         'new',
-        'Do it from Bizi: Accept, Done, Paid on a Telegram order, Sold out / Back on sale on a product, Approve a ticket payment — or type it: “#12 paid”, “accept #12”, “sold out iced coffee”. Bizi always asks first.',
-        'ធ្វើពី Bizi៖ ទទួល បានបញ្ចប់ បានបង់ លើការកម្ម៉ង់ Telegram អស់ / មានលក់វិញ លើទំនិញ អនុម័តការបង់សំបុត្រ — ឬវាយ៖ “#12 បានបង់” “ទទួល #12”។ Bizi តែងតែសួរជាមុនសិន។',
+        'Tell Bizi what to do, in every business: “#12 paid”, “sold out iced coffee”, “price coke 1.5”, “coke +24”, “check in Dara”, “room 101 clean”, “approve leave Sophea”, “Dara owes 10\$”, “stamp Dara”, “close” (Telegram store), “publish” (website) — in Khmer or English, typed or said. Found in several businesses? “Do it for all”. Bizi always asks first, and View only team members can\'t change anything.',
+        'ប្រាប់ Bizi ពីអ្វីដែលត្រូវធ្វើ ក្នុងគ្រប់អាជីវកម្ម៖ “#12 បានបង់” “អស់ កាហ្វេទឹកកក” “តម្លៃ កូកា 1.5” “កូកា +24” “ចូលស្នាក់ ដារ៉ា” “បន្ទប់ 101 ស្អាត” “អនុម័តច្បាប់ សុភា” “ដារ៉ា ជំពាក់ 10\$” “ត្រា ដារ៉ា” “បិទហាង” (ហាង Telegram) “ផ្សាយ” (គេហទំព័រ) — ជាភាសាខ្មែរ ឬអង់គ្លេស វាយ ឬនិយាយ។ រកឃើញក្នុងអាជីវកម្មច្រើន? “ធ្វើសម្រាប់ទាំងអស់”។ Bizi តែងតែសួរជាមុនសិន ហើយសមាជិកក្រុម “មើលប៉ុណ្ណោះ” មិនអាចប្តូរអ្វីបានទេ។',
       ),
       Change(
         'new',
